@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Ivan Streltsov](https://up.htmlacademy.ru/javascript/27/user/473719).
-* Наставник: `Неизвестно`.
+* Наставник: [Ruslan Breev] (https://htmlacademy.ru/profile/blckwltz).
 
 ---
 
