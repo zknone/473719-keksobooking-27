@@ -1,39 +1,72 @@
-/*
-Функция, возвращающая случайное целое число из переданного диапазона включительно.
-Пример использования функции:
-имя_функции(от, до); // Результат: целое число из диапазона "от...до"
-Учтите, что аргументами функции могут быть только положительные числа и ноль.
-Если функции пришли неправильные аргументы, она должна вернуть NaN (о том, что это такое, говорилось в учебнике).
-Придумайте, как функция будет вести себя, если передать значение «до» меньшее, чем значение «от», или равное ему.
-Например, в этом случае функция также может возвращать NaN. Или же вы можете проверить, какой из аргументов больше,
- а какой меньше, и при необходимости поменять их местами. Возможны и другие варианты.
-*/
-
 function randomInteger(min, max) {
-  // получить случайное число от (min-0.5) до (max+0.5)
+  // получить случайное число –решение взял отсюда: https://learn.javascript.ru/task/random-int-min-max
   if (min < 0) {
-    let rand = NaN;
-    return rand;
+    let random = NaN;
+    return random;
   }
 
   if (max < 0) {
-    let rand = NaN;
-    return rand;
+    let random = NaN;
+    return random;
   }
 
   if (min > max) {
-    let rand = NaN;
-    return rand;
+    let random = NaN;
+    return random;
   }
 
-  let rand = min - 0.5 + Math.random() * (max - min + 1);
-  return Math.round(rand);
+  let random = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(random);
 }
 
 // eslint-disable-next-line no-console
 console.log("Рандомное число - " + randomInteger(1, 100));
 
-//https://learn.javascript.ru/task/random-int-min-max взял отсюда
+
+function randomCoordinatesInteger(min, max, roundingTo) {
+  if (min < 0) {
+    let randCoordinate = NaN;
+    return randCoordinate;
+  }
+
+  if (max < 0) {
+    let randCoordinate = NaN;
+    return randCoordinate;
+  }
+
+  if (roundingTo < 0) {
+    let randCoordinate = NaN;
+    return randCoordinate;
+  }
+
+  if (min > max) {
+    let randCoordinate = NaN;
+    return randCoordinate;
+  }
+
+  // как проверка дробных чисел? Мы должны взять roundingTo и проверить с его помощью min и max. Надо просто посчитать количество знаков после запятой.
+  // https://qna.habr.com/q/493201
+
+  const lengthMin = min.toString().match(/\.(\d+)/)?.[1].length;
+  console.log (lengthMin);
+  const lengthMax = max.toString().match(/\.(\d+)/)?.[1].length;
+  console.log (lengthMax);
+
+  if (lengthMin != undefined)
+    if (lengthMin > roundingTo) {
+      let randCoordinate = NaN;
+    return randCoordinate;
+    }
+
+  let multiplier = Math.pow(10, roundingTo);
+  let randCoordinate = Math.round (min - 0.5 + Math.random() * (max - min + 1)*multiplier) / multiplier;
+  return randCoordinate;
+}
+
+console.log("Рандомная координата - " + randomCoordinatesInteger(1.233, 999.77777777, 5));
+
+// делитель для следующей функции вычисляет так. 10 возводим в степень roundingTo
+// Рандом можно сделать так. В целом повторить всю процедуру, что выше. Но умножить цифры на roundingTo. Потом вычисленный результат поделить на это число. Так не понадобится даже округлять как-то.
 
 /*
 Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
