@@ -11,12 +11,29 @@
 
 function randomInteger(min, max) {
   // получить случайное число от (min-0.5) до (max+0.5)
-  const rand = min - 0.5 + Math.random() * (max - min + 1);
+  if (min < 0) {
+    let rand = NaN;
+    return rand;
+  }
+
+  if (max < 0) {
+    let rand = NaN;
+    return rand;
+  }
+
+  if (min > max) {
+    let rand = NaN;
+    return rand;
+  }
+
+  let rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 }
 
 // eslint-disable-next-line no-console
-console.log("Рандомное число - " + randomInteger(1, 9));
+console.log("Рандомное число - " + randomInteger(1, 100));
+
+//https://learn.javascript.ru/task/random-int-min-max взял отсюда
 
 /*
 Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
