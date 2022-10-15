@@ -48,6 +48,7 @@ const MINLAT = 35.65;
 const MAXLAT = 35.7;
 const MINLNG = 139.7;
 const MAXLNG = 139.8;
+const AVATARS = 10;
 
 const checkIn = [
   '12:00',
@@ -85,11 +86,15 @@ const photosLinks = [
 ];
 
 const randomiseFeatures = function (featuresList) {
-  // делаем меньший массив
+  const featuresDouble = featuresList.slice(0);
+  for (let i = 1; i < (featuresDouble.length - randomInteger(Math.ceil(featuresDouble.length / 2) - 1, featuresDouble.length - 1)); i++) {
+    featuresDouble.splice (randomInteger(0, featuresDouble.length - 1), 1);
+  }
+  return featuresDouble;
 };
 
-const generateLink = function () {
-  // создаем хвост адреса
+const generateLink = function (index) {
+  return `img/avatars/user${index.toString().padStart(2, '0')}.png`;
 };
 
 const location = {
@@ -97,27 +102,30 @@ const location = {
   lng: randomCoordinatesInteger(MINLNG, MAXLNG, ROUNDINGTO)
 };
 
-const getAdress = function (coordinates) {
-  // берем из объекта location адреса и пересобираем их по маске {{location.lat}}, {{location.lng}}
+const author = {
+  avatar: generateLink(randomInteger(1,AVATARS))
 };
 
-const author = {
-  avatar: generateLink()
-};
+const getRandomArrayElement = function (array) {
+  return array[randomInteger(0, array.length - 1)];
+}
 
 const offer = {
   // не забудь привести к правильным типам
   title: titleSet[[randomInteger(0, titleSet.length - 1)]],
-  adress: getAdress(location),
+  adress: `${location.lat}, ${location.lng}`,
   price: randomInteger(MINPRICE, MAXPRICE),
-  type: typeOfProperty[randomInteger(0, typeOfProperty.length - 1)],
+  type: getRandomArrayElement(typeOfProperty),
   rooms: randomInteger(1, MAXROOMS),
   guests: randomInteger(1, MAXGUESTS),
-  checkin: checkIn[randomInteger(0, checkIn.length - 1)],
-  checkout: checkOut[randomInteger(0, checkOut.length - 1)],
+  checkin: getRandomArrayElement(checkIn),
+  checkout: getRandomArrayElement(checkOut),
   features: randomiseFeatures(allFeatures),
-  description: descriptionVariants[randomInteger(0, descriptionVariants.length - 1)],
-  photos: photosLinks[randomInteger(0, photosLinks.length - 1)],
+  description: getRandomArrayElement(descriptionVariants),
+  photos: getRandomArrayElement(photosLinks),
 };
 
-console.log (offer);
+// eslint-disable-next-line no-console
+console.log(offer);
+
+console.log(author);
