@@ -22,9 +22,9 @@ function randomCoordinatesInteger(min, max, roundingTo) {
   return randomCoordinate;
 }
 
-const price = randomInteger (10, 300);
+const priceAmount = randomInteger (10, 300);
 
-const type = [
+const typeOfProperty = [
   palace,
   flat,
   house,
@@ -40,6 +40,7 @@ const checkIn = [
   "13:00",
   "14:00"
 ];
+
 const checkOut = [
   "12:00",
   "13:00",
@@ -55,27 +56,48 @@ const allFeatures  = [
   "conditioner"
 ];
 
+const descriptionVariants = {
+  "Светлое просторное помещение, подойдет для самых превиредливых покупателей",
+  "Квартира недалеко от исторического центра города, рядом много ресторанов, есть музеи",
+  "Лучший вариант для тех, кто ищет спокойное место в одном из самых живописных районов города",
+  "Специально для студентов и коммандировочных, предлагаю вам одну из комнат в своей просторной кварирте. Вы можете пользоваться кухней и стиральной машинкой, приходить когда вам угодно.",
+  "Хорошее местечко для тех, кто приезжает в наш город поработать. В квартире есть рабочее место. Есть и кофе-машина. Интернет отличный."
+};
 
-let randomFeatures = function(featuresList) {
+const photosLinks = {
+  "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg",
+  "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg",
+  "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg"
+}
+
+let randomiseFeatures = function(featuresList) {
   // делаем меньший массив
 };
 
+let generateLink = function () {
+  // создаем хвост адреса
+};
+
+let getAdress = function (lat, lng) {
+  // берем из объекта location адреса и пересобираем их по маске {{location.lat}}, {{location.lng}}
+}
+
 let author = {
-  avatar: ""
+  avatar = generateLink();
 }
 
 let offer = {
   title: "",
   adress: [],
-  price: price,
-  type: type[randomInteger(0, TYPE.length - 1)],
+  price: priceAmont,
+  type: typeOfProperty[randomInteger(0, typeOfProperty.length - 1)],
   rooms: rooms,
   guests: guests,
-  checkin: checkIn[randomInteger(0, CHECKIN.length -1)],
-  checkout: checkOut[randomInteger(0, CHECKIN.length -1)],
-  features: randomFeatures(allFeatures),
-  description: "",
-  photos: "",
+  checkin: checkIn[randomInteger(0, checkIn.length -1)],
+  checkout: checkOut[randomInteger(0, checkOut.length -1)],
+  features: randomiseFeatures(allFeatures),
+  description: descriptionVariants[randomInteger(0, descriptionVariants.length -1)],
+  photos: photosLinks[randomInteger(0, photosLinks.length -1)],
 }
 
 let location = {
