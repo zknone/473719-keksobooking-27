@@ -22,7 +22,14 @@ function randomCoordinatesInteger(min, max, roundingTo) {
   return randomCoordinate;
 }
 
-const priceAmount = randomInteger (10, 300);
+const titleSet = [
+  "Красивая комната в центре города",
+  "Удобная квартира в исторической части города",
+  "Квартира со всеми удобствами",
+  "Апартаменты. 5 минут до центра",
+  "Лучшее место для жизни",
+  "Лучший вид в городе"
+];
 
 const typeOfProperty = [
   palace,
@@ -32,8 +39,15 @@ const typeOfProperty = [
   hotel
 ]
 
-const rooms = randomInteger (1, 7);
-const guest = randomInteger (1, 6);
+const MAXROOMS = 7;
+const MAXGUESTS = 6;
+const MINPRICE = 10;
+const MAXPRICE = 300;
+const ROUNDINGTO = 5;
+const MINLAT = 35.65000;
+const MAXLAT = 35.70000;
+const MINLNG = 139.70000;
+const MAXLNG = 139.80000;
 
 const checkIn = [
   "12:00",
@@ -56,19 +70,19 @@ const allFeatures  = [
   "conditioner"
 ];
 
-const descriptionVariants = {
+const descriptionVariants = [
   "Светлое просторное помещение, подойдет для самых превиредливых покупателей",
   "Квартира недалеко от исторического центра города, рядом много ресторанов, есть музеи",
   "Лучший вариант для тех, кто ищет спокойное место в одном из самых живописных районов города",
   "Специально для студентов и коммандировочных, предлагаю вам одну из комнат в своей просторной кварирте. Вы можете пользоваться кухней и стиральной машинкой, приходить когда вам угодно.",
-  "Хорошее местечко для тех, кто приезжает в наш город поработать. В квартире есть рабочее место. Есть и кофе-машина. Интернет отличный."
-};
+  "Хорошее местечко для тех, кто приезжает в наш город поработать. В квартире есть рабочее место. Есть и кофе-машина. Интернет отличный.",
+];
 
-const photosLinks = {
+const photosLinks = [
   "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg",
   "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg",
-  "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg"
-}
+  "https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg",
+];
 
 let randomiseFeatures = function(featuresList) {
   // делаем меньший массив
@@ -83,24 +97,27 @@ let getAdress = function (lat, lng) {
 }
 
 let author = {
-  avatar = generateLink();
+  avatar: generateLink()
 }
 
 let offer = {
-  title: "",
-  adress: [],
-  price: priceAmont,
+  // не забудь привести к правильным типам
+  title: titleSet[[randomInteger(0, titleSet.length - 1)]],
+  adress: getAdress(location.lat, location.lng),
+  price: randomInteger (MINPRICE, MAXPRICE),
   type: typeOfProperty[randomInteger(0, typeOfProperty.length - 1)],
-  rooms: rooms,
-  guests: guests,
+  rooms: randomInteger (1, MAXROOMS),
+  guests: randomInteger (1, MAXGUESTS),
   checkin: checkIn[randomInteger(0, checkIn.length -1)],
   checkout: checkOut[randomInteger(0, checkOut.length -1)],
   features: randomiseFeatures(allFeatures),
   description: descriptionVariants[randomInteger(0, descriptionVariants.length -1)],
-  photos: photosLinks[randomInteger(0, photosLinks.length -1)],
+  photos: photosLinks[randomInteger(0, photosLinks.length -1)]
 }
 
 let location = {
-  lat: 0,
-  lng: 0
+  lat: randomCoordinatesInteger(MINLAT, MAXLAT, ROUNDINGTO),
+  lng: randomCoordinatesInteger(MINLNG, MAXLNG, ROUNDINGTO)
 }
+
+console.log (location);
