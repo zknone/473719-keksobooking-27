@@ -135,11 +135,11 @@ const makeOffer = function() {
 const getResult = function (quantity) {
   const results = [];
   for (let i = 0; i <= quantity - 1; i++) {
-    results[i] = [
-      makeOffer(),
-      makeAuthor(),
-      makeLocation(),
-    ];
+    results[i] = {
+      offer: makeOffer(),
+      author: makeAuthor(),
+      location: makeLocation(),
+    };
   }
   return results;
 };
