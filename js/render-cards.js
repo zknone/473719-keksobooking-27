@@ -14,6 +14,18 @@ const offerTypes = {
   hotel: 'Отель'
 };
 
+const renderFeatures = function (cardElement, features) {
+  const featuresList = cardElement.querySelector('.popup__features');
+  const featuresItems = cardElement.querySelectorAll('.popup__feature');
+  const modifiers = features.map((feature) => `popup__feature--${feature}`);
+  featuresItems.forEach((featureItem) => {
+    const modifier = featureItem.classList[1];
+    if (!modifiers.includes(modifier)) {
+      featureItem.remove();
+    }
+  });
+};
+
 dataBase.forEach((element) => {
   const cardElement = cardTemplate.cloneNode(true);
   //Выведите заголовок объявления offer.title в заголовок .popup__title
@@ -30,17 +42,7 @@ dataBase.forEach((element) => {
   //Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}.
   //Например, «Заезд после 14:00, выезд до 14:00».
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
-  //В список .popup__features выведите все доступные удобства в объявлении.
-  const featuresContainer = cardTemplate.querySelector('.popup__features');
-  const featuresListing = featuresContainer.querySelectorAll('.popup__feature');
-  featuresListing.forEach((featureListItem) => {
-    const isNecessary = element.offer.features.some(
-      (featureItem) => featureListItem.contains('popup__feature--' + featureItem),
-      );
-    if (!isNecessary) {
-      featureListItem.remove();
-    }
-  });
+  renderFeatures(cardElement, element.offer.features);
   //В блок .popup__description выведите описание объекта недвижимости offer.description.
   cardElement.querySelector('.popup__description').textContent = element.offer.description;
   //В блок .popup__photos выведите все фотографии из списка offer.photos.
