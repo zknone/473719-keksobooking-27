@@ -63,14 +63,34 @@ const validatePrice = function (value) {
 const getPriceErrorMessage = function (value) {
   const variants = adForm.querySelector('#type');
   const unit = variants.querySelector(':checked');
-  if (parseInt(value, 10) > maxPrice) {return `Не может стоить больше ${maxPrice} рублей`;}
-  if (minPrice[unit.value] > 0 && parseInt(value, 10) < minPrice[unit.value]) {return `Не может стоить меньше ${minPrice[unit.value]} рублей`;}
+  if (parseInt(value, 10) > maxPrice) {
+    return `Не может стоить больше ${maxPrice} рублей`;
+  }
+  if (minPrice[unit.value] > 0 && parseInt(value, 10) < minPrice[unit.value]) {
+    return `Не может стоить меньше ${minPrice[unit.value]} рублей`;
+  }
 };
 
 pristine.addValidator(
   actualProperty,
   validatePrice,
   getPriceErrorMessage,
+);
+
+const checkRoomsAndCapacity = function () {
+  const rooms = adForm.querySelector('#room_number');
+  const roomUnit = rooms.querySelector(':checked');
+  const capacity = adForm.querySelector('#capacity');
+  const capacityUnit = capacity.querySelector(':checked');
+  return roomUnit.value >= capacityUnit.value;
+};
+
+//написать сообщение, где для нуля будет сообщение, что это не предназначенное для жилья площадь
+
+pristine.addValidator(
+  adForm.querySelector('#capacity'),
+  checkRoomsAndCapacity,
+  'слишком много гостей',
 );
 
 const onUnitChange = function () {
@@ -81,20 +101,6 @@ const onUnitChange = function () {
 adForm
   .querySelectorAll('#type')
   .forEach((item) => item.addEventListener('change', onUnitChange));
-
-//  Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей:
-// 1 комната — «для 1 гостя»;
-// 2 комнаты — «для 2 гостей» или «для 1 гостя»;
-// 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-// 100 комнат — «не для гостей».
-
-const checkRoomsAndCapacity = function () {
-  const rooms = adForm.querySelector('#rooms');
-  const roomUnit = rooms.querySelector(':checked');
-  const capacity = adForm.querySelector('#capacity');
-  const capacityUnit = capacity.querySelector(':checked');
-  //тут нужно добавить словарь
-};
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
