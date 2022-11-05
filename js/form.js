@@ -2,6 +2,18 @@ const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const adFormSlider = adForm.querySelector('.ad-form__slider');
 const adFormMapFilters = document.querySelector('.map__filters');
+const actualProperty = adForm.querySelector('#price');
+const variants = adForm.querySelector('#type');
+const unit = variants.querySelector(':checked');
+
+const maxPrice = 100000;
+const minPrice = {
+  'flat': 1000,
+  'bungalow': 0,
+  'house': 5000,
+  'palace': 100000,
+  'hotel': 3000,
+};
 
 const deactivateForm = function () {
   adForm.classList.add('ad-form--disabled');
@@ -44,32 +56,18 @@ pristine.addValidator(
   'От 30 до 100 символов!'
 );
 
-const actualProperty = adForm.querySelector('#price');
-const maxPrice = 100000;
-const minPrice = {
-  'flat': 1000,
-  'bungalow': 0,
-  'house': 5000,
-  'palace': 100000,
-  'hotel': 3000,
-};
-
 const validatePrice = function (value) {
-  const variants = adForm.querySelector('#type');
-  const unit = variants.querySelector(':checked');
   return parseInt(value, 10) < maxPrice && parseInt(value, 10) > minPrice[unit.value];
 };
 
 const getPriceErrorMessage = function (value) {
-  const variants = adForm.querySelector('#type');
-  const unit = variants.querySelector(':checked');
   if (parseInt(value, 10) > maxPrice) {
     return `Не может стоить больше ${maxPrice} рублей`;
   }
   if (minPrice[unit.value] > 0 && parseInt(value, 10) < minPrice[unit.value]) {
     return `Не может стоить меньше ${minPrice[unit.value]} рублей`;
   }
-};
+}; // откуда берем value?
 
 pristine.addValidator(
   actualProperty,
@@ -85,12 +83,25 @@ const checkRoomsAndCapacity = function () {
   return roomUnit.value >= capacityUnit.value;
 };
 
-//написать сообщение, где для нуля будет сообщение, что это не предназначенное для жилья площадь
+// const getCapacityErrorMessage = function () {
+//   const rooms = adForm.querySelector('#room_number');
+//   const roomUnit = rooms.querySelector(':checked');
+//   const capacity = adForm.querySelector('#capacity');
+//   const capacityUnit = capacity.querySelector(':checked');
+
+//   if (roomUnit.value === 0 && capacityUnit.value !== roomUnit.value) {
+//     return `Не предзазначенная для проживания площадь`;
+//   }
+//   if (roomUnit.value > capacityUnit.value) {
+//     return `В ${roomUnit} комнате/ах не может проживать ${capacityUnit} человек/а`;
+//   }
+// };
 
 pristine.addValidator(
   adForm.querySelector('#capacity'),
   checkRoomsAndCapacity,
-  'слишком много гостей',
+  // getCapacityErrorMessage,
+  'слишком много гостей.',
 );
 
 const onUnitChange = function () {
