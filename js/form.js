@@ -5,6 +5,10 @@ const adFormMapFilters = document.querySelector('.map__filters');
 const actualProperty = adForm.querySelector('#price');
 const variants = adForm.querySelector('#type');
 const unit = variants.querySelector(':checked');
+const rooms = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
+const actualTimeIn = adForm.querySelector('#timein');
+const actualTimeOut = adForm.querySelector('#timeout');
 
 const maxPrice = 100000;
 const minPrice = {
@@ -13,6 +17,13 @@ const minPrice = {
   'house': 5000,
   'palace': 100000,
   'hotel': 3000,
+};
+
+const allOptions = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
 };
 
 const deactivateForm = function () {
@@ -67,7 +78,7 @@ const getPriceErrorMessage = function (value) {
   if (minPrice[unit.value] > 0 && parseInt(value, 10) < minPrice[unit.value]) {
     return `Не может стоить меньше ${minPrice[unit.value]} рублей`;
   }
-}; // откуда берем value?
+};
 
 pristine.addValidator(
   actualProperty,
@@ -76,32 +87,28 @@ pristine.addValidator(
 );
 
 const checkRoomsAndCapacity = function () {
-  const rooms = adForm.querySelector('#room_number');
-  const roomUnit = rooms.querySelector(':checked');
-  const capacity = adForm.querySelector('#capacity');
-  const capacityUnit = capacity.querySelector(':checked');
-  return roomUnit.value >= capacityUnit.value;
+  return allOptions[rooms.value].includes(Number(capacity.value));
 };
 
-// const getCapacityErrorMessage = function () {
-//   const rooms = adForm.querySelector('#room_number');
-//   const roomUnit = rooms.querySelector(':checked');
-//   const capacity = adForm.querySelector('#capacity');
-//   const capacityUnit = capacity.querySelector(':checked');
-
-//   if (roomUnit.value === 0 && capacityUnit.value !== roomUnit.value) {
-//     return `Не предзазначенная для проживания площадь`;
-//   }
-//   if (roomUnit.value > capacityUnit.value) {
-//     return `В ${roomUnit} комнате/ах не может проживать ${capacityUnit} человек/а`;
-//   }
-// };
+const getCapacityErrorMessage = function () {
+  if (rooms.value === '100' && capacity.value !== '0') {
+    return 'Не предзазначенная для проживания площадь';
+  }
+  if (rooms.value !== '100' && rooms.value < capacity.value) {
+    return `В ${rooms.value} комнате/ах не может проживать ${capacity.value} человек/а`;
+  }
+};
 
 pristine.addValidator(
-  adForm.querySelector('#capacity'),
+  rooms,
   checkRoomsAndCapacity,
-  // getCapacityErrorMessage,
-  'слишком много гостей.',
+  getCapacityErrorMessage,
+);
+
+pristine.addValidator(
+  capacity,
+  checkRoomsAndCapacity,
+  getCapacityErrorMessage,
 );
 
 const onUnitChange = function () {
@@ -112,6 +119,24 @@ const onUnitChange = function () {
 adForm
   .querySelectorAll('#type')
   .forEach((item) => item.addEventListener('change', onUnitChange));
+
+const onTimeInChange = function () {
+  actualTimeOut.value = actualTimeIn.value;
+  pristine.validate(actualTimeIn);
+};
+
+const onTimeOutChange = function () {
+  actualTimeIn.value = actualTimeOut.value;
+  pristine.validate(actualTimeOut);
+};
+
+adForm
+  .querySelectorAll('#timein')
+  .forEach((item) => item.addEventListener('change', onTimeInChange));
+
+adForm
+  .querySelectorAll('#timeout')
+  .forEach((item) => item.addEventListener('change', onTimeOutChange));
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
