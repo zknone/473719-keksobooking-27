@@ -44,3 +44,5 @@ const createCard = function (datas) {
 dataBase.forEach((element) => {
   createCard(element);
 });//переделать в функцию и экспорт в мейн
+
+
