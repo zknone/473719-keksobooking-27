@@ -68,7 +68,7 @@ pristine.addValidator(
 );
 
 const validatePrice = function (value) {
-  return parseInt(value, 10) < maxPrice && parseInt(value, 10) > minPrice[unit.value];
+  return parseInt(value, 10) < maxPrice && parseInt(value, 10) >= minPrice[unit.value];
 };
 
 const getPriceErrorMessage = function (value) {
