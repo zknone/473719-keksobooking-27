@@ -163,6 +163,38 @@ adForm.addEventListener('submit', (evt) => {
   pristine.validate();
 });
 
+const sliderElement = document.querySelector('.ad-form__slider');
+const price = document.querySelector('#price');
+let actualVariant = document.querySelector('#type');
+let minPropertyPrice = minPrice[actualVariant.value];
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: minPropertyPrice,
+    max: maxPrice,
+  },
+  start: minPropertyPrice,
+  step: 100,
+  connect: 'lower',
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  price.value = sliderElement.noUiSlider.get();
+});
+
+actualVariant.addEventListener('change', () => {
+  actualVariant = document.querySelector('#type');
+  minPropertyPrice = minPrice[actualVariant.value];
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPropertyPrice,
+      max: maxPrice,
+    },
+    start: minPropertyPrice,
+    step: 100
+  });
+});
+
 export {
   deactivateForm
 };
