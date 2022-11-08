@@ -116,6 +116,26 @@ const onUnitChange = function () {
   pristine.validate(actualProperty);
 };
 
+// const removeSpanFromCapacity = function () {
+//   const fieldCapacity = adForm.querySelector('#capacity');
+//   const spanToDelete = fieldCapacity.nextSibling;
+//   spanToDelete.remove();
+// };
+
+// const removeSpanFromRooms = function () {
+//   const fieldRooms = adForm.querySelector('#rooms');
+//   const spanToDelete = fieldRooms.nextSibling;
+//   spanToDelete.remove();
+// };
+
+// adForm
+//   .querySelectorAll('#rooms')
+//   .forEach((item) => item.addEventListener('change', removeSpanFromCapacity));
+
+// adForm
+//   .querySelectorAll('#capacity')
+//   .forEach((item) => item.addEventListener('change', removeSpanFromRooms));
+
 adForm
   .querySelectorAll('#type')
   .forEach((item) => item.addEventListener('change', onUnitChange));
@@ -141,6 +161,38 @@ adForm
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
+});
+
+const sliderElement = document.querySelector('.ad-form__slider');
+const price = document.querySelector('#price');
+let actualVariant = document.querySelector('#type');
+let minPropertyPrice = minPrice[actualVariant.value];
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: minPropertyPrice,
+    max: maxPrice,
+  },
+  start: minPropertyPrice,
+  step: 100,
+  connect: 'lower',
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  price.value = sliderElement.noUiSlider.get();
+});
+
+actualVariant.addEventListener('change', () => {
+  actualVariant = document.querySelector('#type');
+  minPropertyPrice = minPrice[actualVariant.value];
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPropertyPrice,
+      max: maxPrice,
+    },
+    start: minPropertyPrice,
+    step: 100
+  });
 });
 
 export {

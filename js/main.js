@@ -1,3 +1,2 @@
-import './render-cards.js';
 import './form.js';
-import { activateForm, deactivateForm } from './form.js';
+import './map.js';
