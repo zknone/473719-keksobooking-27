@@ -4,7 +4,6 @@ import {
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const dataBase = getResult(10);
-const cardList = document.querySelector('#map-canvas');
 
 const offerTypes = {
   flat: 'Квартира',
@@ -16,10 +15,10 @@ const offerTypes = {
 
 const renderFeatures = function (cardElement, features) {
   const featuresList = cardElement.querySelector('.popup__features');
-  const featuresItems = cardElement.querySelectorAll('.popup__feature');
+  const featuresItems = featuresList.querySelectorAll('.popup__feature');
   const modifiers = features.map((feature) => `popup__feature--${feature}`);
   featuresItems.forEach((featureItem) => {
-    const modifier = featureItem.classList[1];//сравнивает со вторым классом
+    const modifier = featureItem.classList[1];
     if (!modifiers.includes(modifier)) {
       featureItem.remove();
     }
@@ -38,11 +37,10 @@ const createCard = function (datas) {
   cardElement.querySelector('.popup__description').textContent = datas.offer.description; //надо проверку написать
   cardElement.querySelector('.popup__photo').src = `${datas.offer.photos}`; //проверку надо написать
   cardElement.querySelector('.popup__avatar').src = `${datas.author.avatar}`; //проверку надо написать
-  cardList.appendChild(cardElement);
+  return cardElement;
 };
 
-dataBase.forEach((element) => {
-  createCard(element);
-});//переделать в функцию и экспорт в мейн
+export {createCard};
+export {dataBase};
 
 
