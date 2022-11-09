@@ -5,6 +5,7 @@ const adFormMapFilters = document.querySelector('.map__filters');
 const actualProperty = adForm.querySelector('#price');
 const variants = adForm.querySelector('#type');
 const rooms = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const sliderElement = document.querySelector('.ad-form__slider');
