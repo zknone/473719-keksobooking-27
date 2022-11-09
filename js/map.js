@@ -2,7 +2,6 @@ import './render-cards.js';
 import {
   dataBase
 } from './render-cards.js';
-
 import {
   createCard
 } from './render-cards.js';
@@ -12,6 +11,14 @@ const starterPoint = {
   lat: 35.652832,
   lng: 139.839478,
 };
+
+const regularIconAchor = [20, 40];
+const regularIconSize = [40, 40];
+const regularIconUrl = './img/pin.svg';
+
+const mainIconUrl = './img/main-pin.svg';
+const mainIconSize = [52, 52];
+const mainIconAnchor = [26, 52];
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -26,21 +33,18 @@ L.tileLayer(
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: mainIconUrl,
+  iconSize: mainIconSize,
+  iconAnchor: mainIconAnchor,
 });
 
 const icon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconUrl: regularIconUrl,
+  iconSize: regularIconSize,
+  iconAnchor: regularIconAchor,
 });
 
-const mainPinMarker = L.marker({
-  lat: 35.652832,
-  lng: 139.839478,
-}, {
+const mainPinMarker = L.marker(starterPoint, {
   draggable: true,
   icon: mainPinIcon,
 }, );
