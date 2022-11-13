@@ -1,3 +1,6 @@
+import { resetMap } from './map.js';
+import { starterPoint } from './main.js';
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const adFormSlider = adForm.querySelector('.ad-form__slider');
@@ -9,6 +12,8 @@ const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
+const resetButton = adForm.querySelector('.ad-form__reset');
+const bodyElement = document.querySelector('body');
 
 const maxPrice = 100000;
 const minPrice = {
@@ -193,6 +198,65 @@ actualVariant.addEventListener('change', () => {
     start: minPropertyPrice,
     step: 100
   });
+});
+
+const resetForm = () => {
+  adForm.reset();
+  sliderElement.noUiSlider.set(actualProperty.value);
+  resetMap(starterPoint);
+};
+
+const messageSucced = () => {
+  const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  const okMessage = okMessageTemplate.cloneNode(true);
+  bodyElement.appendChild(okMessage);
+  setTimeout(() => okMessage.remove(), 5000);
+  okMessage.addEventListener('click', () => {
+    okMessage.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      okMessage.remove();
+    }
+  });
+};
+
+const messageError = () => {
+  const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorsMessage = errorsMessageTemplate.cloneNode(true);
+  bodyElement.appendChild(errorsMessage);
+  document.addEventListener('click', () => {
+    errorsMessage.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      errorsMessage.remove();
+    }
+  });
+};
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+  if (isValid) {
+    const formData = new FormData(evt.target);
+
+    fetch('https://27.javascript.pages.academy/keksobooking', {
+      method: 'POST',
+      body: formData,
+    });
+    messageSucced();
+    resetForm();
+  } else {
+    messageError();
+    resetForm();
+  }
+});
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
 });
 
 export {
