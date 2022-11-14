@@ -1,5 +1,9 @@
-import { resetMap } from './map.js';
-import { starterPoint } from './main.js';
+import {
+  resetMap
+} from './map.js';
+import {
+  starterPoint
+} from './main.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -7,7 +11,6 @@ const adFormSlider = adForm.querySelector('.ad-form__slider');
 const adFormMapFilters = document.querySelector('.map__filters');
 const actualProperty = adForm.querySelector('#price');
 const variants = adForm.querySelector('#type');
-const unit = variants.querySelector(':checked');
 const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
@@ -73,10 +76,12 @@ pristine.addValidator(
 );
 
 const validatePrice = function (value) {
-  return parseInt(value, 10) < maxPrice && parseInt(value, 10) > minPrice[unit.value];
+  const unit = variants.querySelector(':checked');
+  return parseInt(value, 10) <= maxPrice && parseInt(value, 10) >= minPrice[unit.value];
 };
 
 const getPriceErrorMessage = function (value) {
+  const unit = variants.querySelector(':checked');
   if (parseInt(value, 10) > maxPrice) {
     return `Не может стоить больше ${maxPrice} рублей`;
   }
@@ -169,9 +174,7 @@ adForm.addEventListener('submit', (evt) => {
 });
 
 const sliderElement = document.querySelector('.ad-form__slider');
-const price = document.querySelector('#price');
-let actualVariant = document.querySelector('#type');
-let minPropertyPrice = minPrice[actualVariant.value];
+let minPropertyPrice = minPrice[variants.value];
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -184,12 +187,12 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  price.value = sliderElement.noUiSlider.get();
+  actualProperty.value = sliderElement.noUiSlider.get();
+  pristine.validate(actualProperty);
 });
 
-actualVariant.addEventListener('change', () => {
-  actualVariant = document.querySelector('#type');
-  minPropertyPrice = minPrice[actualVariant.value];
+variants.addEventListener('change', () => {
+  minPropertyPrice = minPrice[variants.value];
   sliderElement.noUiSlider.updateOptions({
     range: {
       min: minPropertyPrice,
@@ -210,13 +213,20 @@ const messageSucced = () => {
   const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   const okMessage = okMessageTemplate.cloneNode(true);
   bodyElement.appendChild(okMessage);
-  setTimeout(() => okMessage.remove(), 5000);
+  setTimeout(() => {
+    okMessage.remove();
+    // убираем обработчик с документа
+  }, 5000);
   okMessage.addEventListener('click', () => {
     okMessage.remove();
+    //убираю обработчик события c документа
+    //вызвать клир тайм аут
   });
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       okMessage.remove();
+      //убираю обработчик события c документа
+      //вызвать клир тайм аут
     }
   });
 };
@@ -227,10 +237,14 @@ const messageError = () => {
   bodyElement.appendChild(errorsMessage);
   document.addEventListener('click', () => {
     errorsMessage.remove();
+    //убираю оба обработчика события c документа
   });
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       errorsMessage.remove();
+      //убираю оба обработчик события c документа
+
+      //убираем обработчики с других вещей
     }
   });
 };
@@ -246,9 +260,9 @@ adForm.addEventListener('submit', (evt) => {
       method: 'POST',
       body: formData,
     });
-    messageSucced();
+    messageSucced(); // фетч не правильно сделал, должен быть then
     resetForm();
-  } else {
+  } else { //catch... else не нужен, нужно в кетч
     messageError();
     resetForm();
   }
