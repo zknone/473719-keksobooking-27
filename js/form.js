@@ -1,21 +1,29 @@
+import {
+  resetMap
+} from './map.js';
+import {
+  starterPoint
+} from './main.js';
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const adFormSlider = adForm.querySelector('.ad-form__slider');
 const adFormMapFilters = document.querySelector('.map__filters');
 const actualProperty = adForm.querySelector('#price');
 const variants = adForm.querySelector('#type');
-const unit = variants.querySelector(':checked');
 const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
+const resetButton = adForm.querySelector('.ad-form__reset');
+const bodyElement = document.querySelector('body');
 
 const maxPrice = 100000;
 const minPrice = {
   'flat': 1000,
   'bungalow': 0,
   'house': 5000,
-  'palace': 100000,
+  'palace': 10000,
   'hotel': 3000,
 };
 
@@ -68,10 +76,12 @@ pristine.addValidator(
 );
 
 const validatePrice = function (value) {
-  return parseInt(value, 10) < maxPrice && parseInt(value, 10) > minPrice[unit.value];
+  const unit = variants.querySelector(':checked');
+  return parseInt(value, 10) <= maxPrice && parseInt(value, 10) >= minPrice[unit.value];
 };
 
 const getPriceErrorMessage = function (value) {
+  const unit = variants.querySelector(':checked');
   if (parseInt(value, 10) > maxPrice) {
     return `Не может стоить больше ${maxPrice} рублей`;
   }
@@ -164,13 +174,11 @@ adForm.addEventListener('submit', (evt) => {
 });
 
 const sliderElement = document.querySelector('.ad-form__slider');
-const price = document.querySelector('#price');
-let actualVariant = document.querySelector('#type');
-let minPropertyPrice = minPrice[actualVariant.value];
+let minPropertyPrice = minPrice[variants.value];
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: minPropertyPrice,
+    min: minPrice[variants.value],
     max: maxPrice,
   },
   start: minPropertyPrice,
@@ -179,12 +187,12 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  price.value = sliderElement.noUiSlider.get();
+  actualProperty.value = sliderElement.noUiSlider.get();
+  pristine.validate(actualProperty);
 });
 
-actualVariant.addEventListener('change', () => {
-  actualVariant = document.querySelector('#type');
-  minPropertyPrice = minPrice[actualVariant.value];
+variants.addEventListener('change', () => {
+  minPropertyPrice = minPrice[variants.value];
   sliderElement.noUiSlider.updateOptions({
     range: {
       min: minPropertyPrice,
@@ -193,6 +201,94 @@ actualVariant.addEventListener('change', () => {
     start: minPropertyPrice,
     step: 100
   });
+});
+
+const resetForm = () => {
+  adForm.reset();
+  sliderElement.noUiSlider.set(actualProperty.value);
+  resetMap(starterPoint);
+};
+
+//вынести в утилс
+
+const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const okMessage = okMessageTemplate.cloneNode(true);
+const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorsMessage = errorsMessageTemplate.cloneNode(true);
+
+const onOkMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    okMessage.remove();
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
+  }
+};
+
+const onErrorMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    errorsMessage.remove();
+    document.removeEventListener('keydown', onErrorMessageEscKeydown);
+  }
+};
+
+const onOkMessageModalClick = () => {
+  okMessage.remove();
+  okMessage.removeEventListener('click', onOkMessageEscKeydown);
+};
+
+const onErrorMessageModalClick = () => {
+  errorsMessage.remove();
+  errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
+};
+
+const messageSucced = () => {
+  bodyElement.appendChild(okMessage);
+  setTimeout(() => {
+    okMessage.remove();
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
+  }, 5000);
+  okMessage.addEventListener('click', onOkMessageModalClick);
+  document.addEventListener('keydown', onOkMessageEscKeydown);
+};
+
+const messageError = () => {
+  bodyElement.appendChild(errorsMessage);
+  document.addEventListener('click', onErrorMessageModalClick);
+  document.addEventListener('keydown', onErrorMessageEscKeydown);
+};
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if (!isValid) {
+    return;
+  };
+  const formData = new FormData(evt.target);
+  deactivateForm();
+  fetch('https://27.javascript.pages.academy/keksobooking', {
+      method: 'POST',
+      body: formData,
+    })
+    .then((response) => {
+      if (response.ok) {
+        messageSucced();
+        resetForm();
+        activateForm();
+      } else {
+        messageError();
+        resetForm();
+        activateForm();
+      }
+    })
+    .catch(() => {
+      messageError();
+      resetForm();
+      activateForm();
+    });
+});
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
 });
 
 export {
