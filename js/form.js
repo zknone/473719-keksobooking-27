@@ -209,44 +209,49 @@ const resetForm = () => {
   resetMap(starterPoint);
 };
 
+const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const okMessage = okMessageTemplate.cloneNode(true);
+const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorsMessage = errorsMessageTemplate.cloneNode(true);
+
+const onOkMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    okMessage.remove();
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
+  }
+};
+
+const onErrorMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    errorsMessage.remove();
+    document.removeEventListener('keydown', onErrorMessageEscKeydown);
+  }
+};
+
+const onOkMessageModalClick = () => {
+  okMessage.remove();
+  okMessage.removeEventListener('click', onOkMessageEscKeydown);
+};
+
+const onErrorMessageModalClick = () => {
+  errorsMessage.remove();
+  errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
+};
+
 const messageSucced = () => {
-  const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  const okMessage = okMessageTemplate.cloneNode(true);
   bodyElement.appendChild(okMessage);
   setTimeout(() => {
     okMessage.remove();
-    // убираем обработчик с документа
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
   }, 5000);
-  okMessage.addEventListener('click', () => {
-    okMessage.remove();
-    //убираю обработчик события c документа
-    //вызвать клир тайм аут
-  });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      okMessage.remove();
-      //убираю обработчик события c документа
-      //вызвать клир тайм аут
-    }
-  });
+  okMessage.addEventListener('click', onOkMessageModalClick);
+  document.addEventListener('keydown', onOkMessageEscKeydown);
 };
 
 const messageError = () => {
-  const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorsMessage = errorsMessageTemplate.cloneNode(true);
   bodyElement.appendChild(errorsMessage);
-  document.addEventListener('click', () => {
-    errorsMessage.remove();
-    //убираю оба обработчика события c документа
-  });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      errorsMessage.remove();
-      //убираю оба обработчик события c документа
-
-      //убираем обработчики с других вещей
-    }
-  });
+  document.addEventListener('click', onErrorMessageModalClick);
+  document.addEventListener('keydown', onErrorMessageEscKeydown);
 };
 
 adForm.addEventListener('submit', (evt) => {
@@ -255,16 +260,24 @@ adForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
     const formData = new FormData(evt.target);
-
+    deactivateForm();
     fetch('https://27.javascript.pages.academy/keksobooking', {
-      method: 'POST',
-      body: formData,
-    });
-    messageSucced(); // фетч не правильно сделал, должен быть then
-    resetForm();
-  } else { //catch... else не нужен, нужно в кетч
-    messageError();
-    resetForm();
+        method: 'POST',
+        body: formData,
+      })
+      .then((response) => {
+        if (response.ok) {
+          messageSucced();
+          resetForm();
+        } else {
+          messageError();
+          resetForm();
+        }
+      })
+      .catch(() => {
+        messageError();
+        resetForm();
+      });
   }
 });
 
