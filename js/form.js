@@ -178,7 +178,7 @@ let minPropertyPrice = minPrice[variants.value];
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: minPropertyPrice,
+    min: minPrice[variants.value],
     max: maxPrice,
   },
   start: minPropertyPrice,
