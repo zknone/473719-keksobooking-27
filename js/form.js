@@ -256,11 +256,10 @@ const messageError = () => {
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
+  deactivateForm();
   const isValid = pristine.validate();
   if (isValid) {
     const formData = new FormData(evt.target);
-    deactivateForm();
     fetch('https://27.javascript.pages.academy/keksobooking', {
         method: 'POST',
         body: formData,
@@ -278,7 +277,11 @@ adForm.addEventListener('submit', (evt) => {
         messageError();
         resetForm();
       });
-  }
+  } else {
+    messageError();
+    resetForm();
+  };
+  activateForm();
 });
 
 resetButton.addEventListener('click', (evt) => {
