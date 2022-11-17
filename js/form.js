@@ -261,7 +261,7 @@ adForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (!isValid) {
     return;
-  };
+  }
   const formData = new FormData(evt.target);
   deactivateForm();
   fetch('https://27.javascript.pages.academy/keksobooking', {
