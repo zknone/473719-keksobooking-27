@@ -4,6 +4,12 @@ import {
   createCard
 } from './render-cards.js';
 
+const starterPoint = {
+  lat: 35.652832,
+  lng: 139.839478,
+};
+
+
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
@@ -26,7 +32,7 @@ const mainPinMarker = L.marker({
 }, );
 
 const initializeMap = (coordinates) => {
-  const map = L.map('map-canvas')
+  const mapInitialized = L.map('map-canvas')
     .on('load', () => {})
     .setView(coordinates, 10);
 
@@ -34,14 +40,14 @@ const initializeMap = (coordinates) => {
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
-  ).addTo(map);
+  ).addTo(mapInitialized);
 
-  mainPinMarker.addTo(map);
+  mainPinMarker.addTo(mapInitialized);
   mainPinMarker.on('moveend', (evt) => {
     chosenAddress.value = evt.target.getLatLng();
   });
 
-  return (map);
+  return (mapInitialized);
 };
 
 const resetMap = (coordinates) => {
@@ -49,16 +55,20 @@ const resetMap = (coordinates) => {
   mainPinMarker.setLatLng(coordinates);
 };
 
-const createMapMarkers = (dataBase, coordinates) => {
-  const map = initializeMap(coordinates);
-  resetMap(coordinates);
+const map = initializeMap(starterPoint);
+
+const layerForMarkers = L.layerGroup().addTo(map);
+
+const createMapMarkers = (dataBase) => {
+  resetMap(starterPoint);
+  layerForMarkers.clearLayers();
   dataBase.forEach((dataUnit) => {
     const marker = L.marker(dataUnit.location, {
       icon,
     });
 
     marker
-      .addTo(map)
+      .addTo(layerForMarkers)
       .bindPopup(createCard(dataUnit));
   });
 };

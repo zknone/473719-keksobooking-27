@@ -1,9 +1,6 @@
 import {
   resetMap
 } from './map.js';
-import {
-  starterPoint
-} from './main.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -125,26 +122,6 @@ const onUnitChange = function () {
   actualProperty.placeholder = minPrice[this.value];
   pristine.validate(actualProperty);
 };
-
-// const removeSpanFromCapacity = function () {
-//   const fieldCapacity = adForm.querySelector('#capacity');
-//   const spanToDelete = fieldCapacity.nextSibling;
-//   spanToDelete.remove();
-// };
-
-// const removeSpanFromRooms = function () {
-//   const fieldRooms = adForm.querySelector('#rooms');
-//   const spanToDelete = fieldRooms.nextSibling;
-//   spanToDelete.remove();
-// };
-
-// adForm
-//   .querySelectorAll('#rooms')
-//   .forEach((item) => item.addEventListener('change', removeSpanFromCapacity));
-
-// adForm
-//   .querySelectorAll('#capacity')
-//   .forEach((item) => item.addEventListener('change', removeSpanFromRooms));
 
 adForm
   .querySelectorAll('#type')

@@ -5,21 +5,12 @@ import {
 } from './map.js';
 
 import {
-  filterOn
+  onFilterChange
 } from './filtring.js';
-
-const starterPoint = {
-  lat: 35.652832,
-  lng: 139.839478,
-};
-
 
 fetch('https://27.javascript.pages.academy/keksobooking/data')
   .then((response) => response.json())
   .then((packages) => {
-    createMapMarkers(filterOn(packages), starterPoint);
+    createMapMarkers(packages.slice(0, 10));
+    onFilterChange(packages, createMapMarkers);
   });
-
-export {
-  starterPoint
-};
