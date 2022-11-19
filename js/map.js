@@ -46,7 +46,6 @@ const initializeMap = (coordinates) => {
   mainPinMarker.on('moveend', (evt) => {
     chosenAddress.value = evt.target.getLatLng();
   });
-
   return (mapInitialized);
 };
 
@@ -76,5 +75,6 @@ const createMapMarkers = (dataBase) => {
 export {
   createMapMarkers,
   resetMap,
-  initializeMap
+  initializeMap,
+  starterPoint
 };

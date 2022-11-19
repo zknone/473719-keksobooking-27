@@ -2,6 +2,10 @@ import {
   resetMap
 } from './map.js';
 
+import {
+  starterPoint
+} from './map.js';
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const adFormSlider = adForm.querySelector('.ad-form__slider');
@@ -236,9 +240,10 @@ const messageError = () => {
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
-  if (!isValid) {
-    return;
-  }
+  // if (!isValid) {
+  //   return;
+  // }
+  // спросить про это у Руслана
   const formData = new FormData(evt.target);
   deactivateForm();
   fetch('https://27.javascript.pages.academy/keksobooking', {
@@ -269,8 +274,6 @@ resetButton.addEventListener('click', (evt) => {
 });
 
 export {
-  deactivateForm
-};
-export {
+  deactivateForm,
   activateForm
 };
