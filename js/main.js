@@ -5,9 +5,15 @@ import {
 } from './map.js';
 
 import {
-  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES
+  onFilterChange,
+  QUANTITY_OF_RENDERED_BUBBLES
 } from './filtring.js';
-import { activateForm, deactivateForm, onFormSubmit, onResetButton } from './form.js';
+import {
+  activateForm,
+  deactivateForm,
+  onFormSubmit,
+  onResetButton
+} from './form.js';
 
 deactivateForm();
 
