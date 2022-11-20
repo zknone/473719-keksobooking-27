@@ -98,12 +98,10 @@ const formFilters = (offers, evt) => {
 
 const onFilterChange = (offers, callback) => {
   filterForm.addEventListener('change', (evt) => {
-    // debounce(() => {
-    callback(formFilters(offers, evt));
-    // });
+    debounce(callback(formFilters(offers, evt)));
   });
 };
 
 export {
-  onFilterChange
+  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES
 };
