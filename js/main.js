@@ -3,7 +3,6 @@ import './map.js';
 import {
   createMapMarkers
 } from './map.js';
-
 import {
   onFilterChange,
   QUANTITY_OF_RENDERED_BUBBLES
@@ -14,6 +13,7 @@ import {
   onFormSubmit,
   onResetButton
 } from './form.js';
+import './preview.js';
 
 deactivateForm();
 

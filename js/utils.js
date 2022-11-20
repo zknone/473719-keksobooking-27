@@ -18,7 +18,6 @@ function throttle(callback, delayBetweenFrames) {
   };
 }
 
-
 export {
   debounce,
   throttle
