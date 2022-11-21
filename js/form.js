@@ -7,7 +7,9 @@ import {
   starterPoint
 } from './map.js';
 import {
-  debounce
+  debounce,
+  messageError,
+  messageSucced
 } from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -21,7 +23,7 @@ const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
-const bodyElement = document.querySelector('body');
+
 
 const maxPrice = 100000;
 const minPrice = {
@@ -192,53 +194,6 @@ const resetForm = () => {
   adForm.reset();
   sliderElement.noUiSlider.set(actualProperty.value);
   resetMap(starterPoint);
-};
-
-//вынести в утилс
-
-const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const okMessage = okMessageTemplate.cloneNode(true);
-const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorsMessage = errorsMessageTemplate.cloneNode(true);
-
-const onOkMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
-    okMessage.remove();
-    document.removeEventListener('keydown', onOkMessageEscKeydown);
-  }
-};
-
-const onErrorMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
-    errorsMessage.remove();
-    document.removeEventListener('keydown', onErrorMessageEscKeydown);
-  }
-};
-
-const onOkMessageModalClick = () => {
-  okMessage.remove();
-  okMessage.removeEventListener('click', onOkMessageEscKeydown);
-};
-
-const onErrorMessageModalClick = () => {
-  errorsMessage.remove();
-  errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
-};
-
-const messageSucced = () => {
-  bodyElement.appendChild(okMessage);
-  setTimeout(() => {
-    okMessage.remove();
-    document.removeEventListener('keydown', onOkMessageEscKeydown);
-  }, 5000);
-  okMessage.addEventListener('click', onOkMessageModalClick);
-  document.addEventListener('keydown', onOkMessageEscKeydown);
-};
-
-const messageError = () => {
-  bodyElement.appendChild(errorsMessage);
-  document.addEventListener('click', onErrorMessageModalClick);
-  document.addEventListener('keydown', onErrorMessageEscKeydown);
 };
 
 const onFormSubmit = (packages) => {
