@@ -8,7 +8,7 @@ const offerTypes = {
   hotel: 'Отель'
 };
 
-const renderFeatures = function (cardElement, features) {
+const renderFeatures = (cardElement, features) => {
   const featuresList = cardElement.querySelector('.popup__features');
   const featuresItems = featuresList.querySelectorAll('.popup__feature');
   if (features && features.length) {
@@ -51,7 +51,7 @@ const renderAvatar = (cardElement, avatar) => {
   }
 };
 
-const createCard = function (datas) {
+const createCard = (datas) => {
   const cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = datas.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = datas.offer.address;

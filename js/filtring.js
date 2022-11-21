@@ -3,7 +3,7 @@ import {
 } from './utils.js';
 
 const QUANTITY_OF_RENDERED_BUBBLES = 10;
-const priceVariants = {
+const PriceVariants = {
   MIDDLE: 10000,
   HIGH: 50000,
 };
@@ -24,11 +24,11 @@ const filterByPrice = (offer, price) => {
     case 'any':
       return true;
     case 'low':
-      return offer.offer.price < priceVariants.MIDDLE;
+      return offer.offer.price < PriceVariants.MIDDLE;
     case 'middle':
-      return (offer.offer.price < priceVariants.HIGH && offer.offer.price >= priceVariants.MIDDLE);
+      return (offer.offer.price < PriceVariants.HIGH && offer.offer.price >= PriceVariants.MIDDLE);
     case 'high':
-      return offer.offer.price >= priceVariants.HIGH;
+      return offer.offer.price >= PriceVariants.HIGH;
   }
 };
 
@@ -51,7 +51,7 @@ const filterByFeatures = (offer, features) => {
   return features.every((feature) => offer.offer.features.includes(feature));
 };
 
-const formFilters = (offers, evt) => {
+const applyFilters = (offers, evt) => {
   let chosenType = typeOfProperty.value;
   let chosenPrice = priceOfProperty.value;
   let chosenRooms = roomsQuantity.value;
@@ -98,7 +98,7 @@ const formFilters = (offers, evt) => {
 
 const onFilterChange = (offers, callback) => {
   filterForm.addEventListener('change', (evt) => {
-    debounce(callback(formFilters(offers, evt)));
+    debounce(callback(applyFilters(offers, evt)));
   });
 };
 

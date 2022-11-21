@@ -1,12 +1,12 @@
-function debounce(callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
-function throttle(callback, delayBetweenFrames) {
+const throttle = (callback, delayBetweenFrames) => {
   let lastTime = 0;
 
   return (...rest) => {
@@ -16,7 +16,7 @@ function throttle(callback, delayBetweenFrames) {
       lastTime = now;
     }
   };
-}
+};
 
 const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const okMessage = okMessageTemplate.cloneNode(true);
@@ -48,7 +48,7 @@ const onErrorMessageModalClick = () => {
   errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
 };
 
-const messageSucced = () => {
+const sendSuccedMessage = () => {
   bodyElement.appendChild(okMessage);
   setTimeout(() => {
     okMessage.remove();
@@ -58,7 +58,7 @@ const messageSucced = () => {
   document.addEventListener('keydown', onOkMessageEscKeydown);
 };
 
-const messageError = () => {
+const sendErrorMessage = () => {
   bodyElement.appendChild(errorsMessage);
   document.addEventListener('click', onErrorMessageModalClick);
   document.addEventListener('keydown', onErrorMessageEscKeydown);
@@ -67,6 +67,6 @@ const messageError = () => {
 export {
   debounce,
   throttle,
-  messageError,
-  messageSucced
+  sendErrorMessage,
+  sendSuccedMessage
 };

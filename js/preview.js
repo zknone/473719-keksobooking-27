@@ -1,4 +1,6 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const imgWidth = 70;
+const imgHeight = 70;
 
 const avatarChooser = document.querySelector('.ad-form-header__input');
 const photoChooser = document.querySelector('.ad-form__input');
@@ -8,8 +10,8 @@ const photoPreview = document.querySelector('.ad-form__photo');
 const imageForPreview = document.createElement('img');
 
 photoPreview.append(imageForPreview);
-imageForPreview.width = 70;
-imageForPreview.height = 70;
+imageForPreview.width = imgWidth;
+imageForPreview.height = imgHeight;
 imageForPreview.classList.add('ad-form__photo-image');
 
 const onImageChange = (input, output) => {

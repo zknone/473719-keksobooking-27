@@ -22,10 +22,7 @@ const icon = L.icon({
 });
 
 const chosenAddress = document.querySelector('#address');
-const mainPinMarker = L.marker({
-  lat: 35.652832,
-  lng: 139.839478,
-}, {
+const mainPinMarker = L.marker(starterPoint, {
   draggable: true,
   icon: mainPinIcon,
 }, );

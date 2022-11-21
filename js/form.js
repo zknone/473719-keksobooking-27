@@ -8,8 +8,8 @@ import {
 } from './map.js';
 import {
   debounce,
-  messageError,
-  messageSucced
+  sendErrorMessage,
+  sendSuccedMessage
 } from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -24,6 +24,10 @@ const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
 
+const HeaderLength = {
+  min: 30,
+  max: 100
+};
 
 const maxPrice = 100000;
 const minPrice = {
@@ -41,7 +45,9 @@ const allOptions = {
   100: [0],
 };
 
-const deactivateForm = function () {
+const postingAddress = 'https://27.javascript.pages.academy/keksobooking';
+
+const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
   adFormFieldsets.forEach((adFormFieldset) => {
     adFormFieldset.disabled = true;
@@ -52,7 +58,7 @@ const deactivateForm = function () {
   adFormMapFilters.classList.add('map__filters--disabled');
 };
 
-const activateForm = function () {
+const activateForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormFieldsets.forEach((adFormFieldset) => {
     adFormFieldset.disabled = false;
@@ -72,8 +78,9 @@ const pristine = new Pristine(adForm, {
   errorTextTag: 'span',
 });
 
-const validateTitle = function (value) {
-  return value.length >= 30 && value.length <= 100;
+const validateTitle = (value) => {
+  const validation = value.length >= HeaderLength.min && value.length <= HeaderLength.max;
+  return validation;
 };
 
 pristine.addValidator(
@@ -82,12 +89,12 @@ pristine.addValidator(
   'От 30 до 100 символов!'
 );
 
-const validatePrice = function (value) {
+const validatePrice = (value) => {
   const unit = variants.querySelector(':checked');
   return parseInt(value, 10) <= maxPrice && parseInt(value, 10) >= minPrice[unit.value];
 };
 
-const getPriceErrorMessage = function (value) {
+const getPriceErrorMessage = (value) => {
   const unit = variants.querySelector(':checked');
   if (parseInt(value, 10) > maxPrice) {
     return `Не может стоить больше ${maxPrice} рублей`;
@@ -103,11 +110,12 @@ pristine.addValidator(
   getPriceErrorMessage,
 );
 
-const checkRoomsAndCapacity = function () {
-  return allOptions[rooms.value].includes(Number(capacity.value));
+const checkRoomsAndCapacity = () => {
+  const validation = allOptions[rooms.value].includes(Number(capacity.value));
+  return validation;
 };
 
-const getCapacityErrorMessage = function () {
+const getCapacityErrorMessage = () => {
   if (rooms.value === '100' && capacity.value !== '0') {
     return 'Не предзазначенная для проживания площадь';
   }
@@ -128,7 +136,7 @@ pristine.addValidator(
   getCapacityErrorMessage,
 );
 
-const onUnitChange = function () {
+const onUnitChange = () => {
   actualProperty.placeholder = minPrice[this.value];
   pristine.validate(actualProperty);
 };
@@ -137,12 +145,12 @@ adForm
   .querySelectorAll('#type')
   .forEach((item) => item.addEventListener('change', onUnitChange));
 
-const onTimeInChange = function () {
+const onTimeInChange = () => {
   actualTimeOut.value = actualTimeIn.value;
   pristine.validate(actualTimeIn);
 };
 
-const onTimeOutChange = function () {
+const onTimeOutChange = () => {
   actualTimeIn.value = actualTimeOut.value;
   pristine.validate(actualTimeOut);
 };
@@ -202,25 +210,26 @@ const onFormSubmit = (packages) => {
     pristine.validate();
     const formData = new FormData(evt.target);
     deactivateForm();
-    fetch('https://27.javascript.pages.academy/keksobooking', {
+
+    fetch(postingAddress, {
       method: 'POST',
       body: formData,
     })
       .then((response) => {
         if (response.ok) {
-          messageSucced();
+          sendSuccedMessage();
           resetForm();
           debounce(createMapMarkers(packages));
           activateForm();
         } else {
-          messageError();
+          sendErrorMessage();
           resetForm();
           debounce(createMapMarkers(packages));
           activateForm();
         }
       })
       .catch(() => {
-        messageError();
+        sendErrorMessage();
         resetForm();
         debounce(createMapMarkers(packages));
         activateForm();
