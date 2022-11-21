@@ -7,7 +7,9 @@ import {
   starterPoint
 } from './map.js';
 import {
-  debounce
+  debounce,
+  messageError,
+  messageSucced
 } from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -21,7 +23,7 @@ const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
-const bodyElement = document.querySelector('body');
+
 
 const maxPrice = 100000;
 const minPrice = {
@@ -194,53 +196,6 @@ const resetForm = () => {
   resetMap(starterPoint);
 };
 
-//вынести в утилс
-
-const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const okMessage = okMessageTemplate.cloneNode(true);
-const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorsMessage = errorsMessageTemplate.cloneNode(true);
-
-const onOkMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
-    okMessage.remove();
-    document.removeEventListener('keydown', onOkMessageEscKeydown);
-  }
-};
-
-const onErrorMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
-    errorsMessage.remove();
-    document.removeEventListener('keydown', onErrorMessageEscKeydown);
-  }
-};
-
-const onOkMessageModalClick = () => {
-  okMessage.remove();
-  okMessage.removeEventListener('click', onOkMessageEscKeydown);
-};
-
-const onErrorMessageModalClick = () => {
-  errorsMessage.remove();
-  errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
-};
-
-const messageSucced = () => {
-  bodyElement.appendChild(okMessage);
-  setTimeout(() => {
-    okMessage.remove();
-    document.removeEventListener('keydown', onOkMessageEscKeydown);
-  }, 5000);
-  okMessage.addEventListener('click', onOkMessageModalClick);
-  document.addEventListener('keydown', onOkMessageEscKeydown);
-};
-
-const messageError = () => {
-  bodyElement.appendChild(errorsMessage);
-  document.addEventListener('click', onErrorMessageModalClick);
-  document.addEventListener('keydown', onErrorMessageEscKeydown);
-};
-
 const onFormSubmit = (packages) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -248,9 +203,9 @@ const onFormSubmit = (packages) => {
     const formData = new FormData(evt.target);
     deactivateForm();
     fetch('https://27.javascript.pages.academy/keksobooking', {
-        method: 'POST',
-        body: formData,
-      })
+      method: 'POST',
+      body: formData,
+    })
       .then((response) => {
         if (response.ok) {
           messageSucced();
@@ -274,7 +229,7 @@ const onFormSubmit = (packages) => {
 };
 
 const onResetButton = (packages) => {
-  resetButton.addEventListener('click', evt => {
+  resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
     debounce(createMapMarkers(packages));
