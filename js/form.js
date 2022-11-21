@@ -274,7 +274,7 @@ const onFormSubmit = (packages) => {
 };
 
 const onResetButton = (packages) => {
-  resetButton.addEventListener('click', evt => {
+  resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
     debounce(createMapMarkers(packages));
