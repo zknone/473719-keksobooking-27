@@ -210,6 +210,7 @@ const onFormSubmit = (packages) => {
     pristine.validate();
     const formData = new FormData(evt.target);
     deactivateForm();
+
     fetch(postingAddress, {
       method: 'POST',
       body: formData,

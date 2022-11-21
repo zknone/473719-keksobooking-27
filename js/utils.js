@@ -1,9 +1,3 @@
-const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const okMessage = okMessageTemplate.cloneNode(true);
-const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorsMessage = errorsMessageTemplate.cloneNode(true);
-const bodyElement = document.querySelector('body');
-
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
@@ -23,6 +17,58 @@ const throttle = (callback, delayBetweenFrames) => {
     }
   };
 };
+
+const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const okMessage = okMessageTemplate.cloneNode(true);
+const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorsMessage = errorsMessageTemplate.cloneNode(true);
+const bodyElement = document.querySelector('body');
+
+const onOkMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    okMessage.remove();
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
+  }
+};
+
+const onErrorMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    errorsMessage.remove();
+    document.removeEventListener('keydown', onErrorMessageEscKeydown);
+  }
+};
+
+const onOkMessageModalClick = () => {
+  okMessage.remove();
+  okMessage.removeEventListener('click', onOkMessageEscKeydown);
+};
+
+const onErrorMessageModalClick = () => {
+  errorsMessage.remove();
+  errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
+};
+
+const sendSuccedMessage = () => {
+  bodyElement.appendChild(okMessage);
+  setTimeout(() => {
+    okMessage.remove();
+    document.removeEventListener('keydown', onOkMessageEscKeydown);
+  }, 5000);
+  okMessage.addEventListener('click', onOkMessageModalClick);
+  document.addEventListener('keydown', onOkMessageEscKeydown);
+};
+
+const sendErrorMessage = () => {
+  bodyElement.appendChild(errorsMessage);
+  document.addEventListener('click', onErrorMessageModalClick);
+  document.addEventListener('keydown', onErrorMessageEscKeydown);
+};
+
+const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const okMessage = okMessageTemplate.cloneNode(true);
+const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorsMessage = errorsMessageTemplate.cloneNode(true);
+const bodyElement = document.querySelector('body');
 
 const onOkMessageEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
