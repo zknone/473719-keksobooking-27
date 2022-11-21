@@ -41,7 +41,7 @@ const allOptions = {
   100: [0],
 };
 
-const deactivateForm = function () {
+const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
   adFormFieldsets.forEach((adFormFieldset) => {
     adFormFieldset.disabled = true;
@@ -52,7 +52,7 @@ const deactivateForm = function () {
   adFormMapFilters.classList.add('map__filters--disabled');
 };
 
-const activateForm = function () {
+const activateForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormFieldsets.forEach((adFormFieldset) => {
     adFormFieldset.disabled = false;
@@ -72,7 +72,7 @@ const pristine = new Pristine(adForm, {
   errorTextTag: 'span',
 });
 
-const validateTitle = function (value) {
+const validateTitle = (value) => {
   return value.length >= 30 && value.length <= 100;
 };
 
@@ -82,12 +82,12 @@ pristine.addValidator(
   'От 30 до 100 символов!'
 );
 
-const validatePrice = function (value) {
+const validatePrice = (value) => {
   const unit = variants.querySelector(':checked');
   return parseInt(value, 10) <= maxPrice && parseInt(value, 10) >= minPrice[unit.value];
 };
 
-const getPriceErrorMessage = function (value) {
+const getPriceErrorMessage = (value) => {
   const unit = variants.querySelector(':checked');
   if (parseInt(value, 10) > maxPrice) {
     return `Не может стоить больше ${maxPrice} рублей`;
@@ -103,11 +103,11 @@ pristine.addValidator(
   getPriceErrorMessage,
 );
 
-const checkRoomsAndCapacity = function () {
+const checkRoomsAndCapacity = () => {
   return allOptions[rooms.value].includes(Number(capacity.value));
 };
 
-const getCapacityErrorMessage = function () {
+const getCapacityErrorMessage = () => {
   if (rooms.value === '100' && capacity.value !== '0') {
     return 'Не предзазначенная для проживания площадь';
   }
@@ -128,7 +128,7 @@ pristine.addValidator(
   getCapacityErrorMessage,
 );
 
-const onUnitChange = function () {
+const onUnitChange = () => {
   actualProperty.placeholder = minPrice[this.value];
   pristine.validate(actualProperty);
 };
@@ -137,12 +137,12 @@ adForm
   .querySelectorAll('#type')
   .forEach((item) => item.addEventListener('change', onUnitChange));
 
-const onTimeInChange = function () {
+const onTimeInChange = () => {
   actualTimeOut.value = actualTimeIn.value;
   pristine.validate(actualTimeIn);
 };
 
-const onTimeOutChange = function () {
+const onTimeOutChange = () => {
   actualTimeIn.value = actualTimeOut.value;
   pristine.validate(actualTimeOut);
 };

@@ -51,7 +51,7 @@ const filterByFeatures = (offer, features) => {
   return features.every((feature) => offer.offer.features.includes(feature));
 };
 
-const makeilters = (offers, evt) => {
+const applyFilters = (offers, evt) => {
   let chosenType = typeOfProperty.value;
   let chosenPrice = priceOfProperty.value;
   let chosenRooms = roomsQuantity.value;
@@ -98,7 +98,7 @@ const makeilters = (offers, evt) => {
 
 const onFilterChange = (offers, callback) => {
   filterForm.addEventListener('change', (evt) => {
-    debounce(callback(makeFilters(offers, evt)));
+    debounce(callback(applyFilters(offers, evt)));
   });
 };
 
