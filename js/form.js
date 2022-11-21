@@ -248,9 +248,9 @@ const onFormSubmit = (packages) => {
     const formData = new FormData(evt.target);
     deactivateForm();
     fetch('https://27.javascript.pages.academy/keksobooking', {
-        method: 'POST',
-        body: formData,
-      })
+      method: 'POST',
+      body: formData,
+    })
       .then((response) => {
         if (response.ok) {
           messageSucced();
