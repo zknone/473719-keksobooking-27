@@ -8,8 +8,8 @@ import {
 } from './map.js';
 import {
   debounce,
-  messageError,
-  messageSucced
+  sendErrorMessage,
+  sendSuccedMessage
 } from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -208,19 +208,19 @@ const onFormSubmit = (packages) => {
     })
       .then((response) => {
         if (response.ok) {
-          messageSucced();
+          sendSuccedMessage();
           resetForm();
           debounce(createMapMarkers(packages));
           activateForm();
         } else {
-          messageError();
+          sendErrorMessage();
           resetForm();
           debounce(createMapMarkers(packages));
           activateForm();
         }
       })
       .catch(() => {
-        messageError();
+        sendErrorMessage();
         resetForm();
         debounce(createMapMarkers(packages));
         activateForm();

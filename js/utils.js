@@ -48,7 +48,7 @@ const onErrorMessageModalClick = () => {
   errorsMessage.removeEventListener('click', onErrorMessageEscKeydown);
 };
 
-const messageSucced = () => {
+const sendSuccedMessage = () => {
   bodyElement.appendChild(okMessage);
   setTimeout(() => {
     okMessage.remove();
@@ -58,7 +58,7 @@ const messageSucced = () => {
   document.addEventListener('keydown', onOkMessageEscKeydown);
 };
 
-const messageError = () => {
+const sendErrorMessage = () => {
   bodyElement.appendChild(errorsMessage);
   document.addEventListener('click', onErrorMessageModalClick);
   document.addEventListener('keydown', onErrorMessageEscKeydown);
@@ -67,6 +67,6 @@ const messageError = () => {
 export {
   debounce,
   throttle,
-  messageError,
-  messageSucced
+  sendErrorMessage,
+  sendSuccedMessage
 };
