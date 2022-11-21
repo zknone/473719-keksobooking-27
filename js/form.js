@@ -79,7 +79,8 @@ const pristine = new Pristine(adForm, {
 });
 
 const validateTitle = (value) => {
-  return value.length >= HeaderLength.min && value.length <= HeaderLength.max;
+  const validation = value.length >= HeaderLength.min && value.length <= HeaderLength.max;
+  return validation;
 };
 
 pristine.addValidator(
@@ -110,7 +111,8 @@ pristine.addValidator(
 );
 
 const checkRoomsAndCapacity = () => {
-  return allOptions[rooms.value].includes(Number(capacity.value));
+  const validation = allOptions[rooms.value].includes(Number(capacity.value));
+  return validation;
 };
 
 const getCapacityErrorMessage = () => {

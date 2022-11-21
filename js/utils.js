@@ -1,3 +1,9 @@
+const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const okMessage = okMessageTemplate.cloneNode(true);
+const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorsMessage = errorsMessageTemplate.cloneNode(true);
+const bodyElement = document.querySelector('body');
+
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
@@ -17,12 +23,6 @@ const throttle = (callback, delayBetweenFrames) => {
     }
   };
 };
-
-const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const okMessage = okMessageTemplate.cloneNode(true);
-const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorsMessage = errorsMessageTemplate.cloneNode(true);
-const bodyElement = document.querySelector('body');
 
 const onOkMessageEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
