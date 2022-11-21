@@ -1,6 +1,14 @@
 import {
-  resetMap
+  resetMap,
+  createMapMarkers
 } from './map.js';
+
+import {
+  starterPoint
+} from './map.js';
+import {
+  debounce
+} from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -233,44 +241,49 @@ const messageError = () => {
   document.addEventListener('keydown', onErrorMessageEscKeydown);
 };
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if (!isValid) {
-    return;
-  }
-  const formData = new FormData(evt.target);
-  deactivateForm();
-  fetch('https://27.javascript.pages.academy/keksobooking', {
-      method: 'POST',
-      body: formData,
-    })
-    .then((response) => {
-      if (response.ok) {
-        messageSucced();
-        resetForm();
-        activateForm();
-      } else {
+const onFormSubmit = (packages) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+    const formData = new FormData(evt.target);
+    deactivateForm();
+    fetch('https://27.javascript.pages.academy/keksobooking', {
+        method: 'POST',
+        body: formData,
+      })
+      .then((response) => {
+        if (response.ok) {
+          messageSucced();
+          resetForm();
+          debounce(createMapMarkers(packages));
+          activateForm();
+        } else {
+          messageError();
+          resetForm();
+          debounce(createMapMarkers(packages));
+          activateForm();
+        }
+      })
+      .catch(() => {
         messageError();
         resetForm();
+        debounce(createMapMarkers(packages));
         activateForm();
-      }
-    })
-    .catch(() => {
-      messageError();
-      resetForm();
-      activateForm();
-    });
-});
-
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForm();
-});
-
-export {
-  deactivateForm
+      });
+  });
 };
+
+const onResetButton = (packages) => {
+  resetButton.addEventListener('click', evt => {
+    evt.preventDefault();
+    resetForm();
+    debounce(createMapMarkers(packages));
+  });
+};
+
 export {
-  activateForm
+  deactivateForm,
+  activateForm,
+  onResetButton,
+  onFormSubmit
 };
