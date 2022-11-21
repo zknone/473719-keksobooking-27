@@ -24,6 +24,10 @@ const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
 
+const HeaderLength = {
+  min: 30,
+  max: 100
+};
 
 const maxPrice = 100000;
 const minPrice = {
@@ -40,6 +44,8 @@ const allOptions = {
   3: [1, 2, 3],
   100: [0],
 };
+
+const postingAddress = 'https://27.javascript.pages.academy/keksobooking';
 
 const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -73,7 +79,7 @@ const pristine = new Pristine(adForm, {
 });
 
 const validateTitle = (value) => {
-  return value.length >= 30 && value.length <= 100;
+  return value.length >= HeaderLength.min && value.length <= HeaderLength.max;
 };
 
 pristine.addValidator(
@@ -202,7 +208,7 @@ const onFormSubmit = (packages) => {
     pristine.validate();
     const formData = new FormData(evt.target);
     deactivateForm();
-    fetch('https://27.javascript.pages.academy/keksobooking', {
+    fetch(postingAddress, {
       method: 'POST',
       body: formData,
     })

@@ -15,9 +15,11 @@ import {
 } from './form.js';
 import './preview.js';
 
+const dataSource = 'https://27.javascript.pages.academy/keksobooking/data';
+
 deactivateForm();
 
-fetch('https://27.javascript.pages.academy/keksobooking/data')
+fetch(dataSource)
   .then((response) => response.json())
   .then((packages) => {
     activateForm();
