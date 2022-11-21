@@ -9,7 +9,6 @@ const starterPoint = {
   lng: 139.839478,
 };
 
-
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
@@ -46,25 +45,21 @@ const initializeMap = (coordinates) => {
   mainPinMarker.on('moveend', (evt) => {
     chosenAddress.value = evt.target.getLatLng();
   });
-<<<<<<< HEAD
-
-=======
->>>>>>> module12-task1
   return (mapInitialized);
-};
-
-const resetMap = (coordinates) => {
-  chosenAddress.value = `LatLng(${coordinates.lat}, ${coordinates.lng})`;
-  mainPinMarker.setLatLng(coordinates);
 };
 
 const map = initializeMap(starterPoint);
 
 const layerForMarkers = L.layerGroup().addTo(map);
 
+const resetMap = (coordinates) => {
+  chosenAddress.value = `LatLng(${coordinates.lat}, ${coordinates.lng})`;
+  mainPinMarker.setLatLng(coordinates);
+  layerForMarkers.clearLayers();
+};
+
 const createMapMarkers = (dataBase) => {
   resetMap(starterPoint);
-  layerForMarkers.clearLayers();
   dataBase.forEach((dataUnit) => {
     const marker = L.marker(dataUnit.location, {
       icon,
