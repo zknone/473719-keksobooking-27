@@ -1,3 +1,5 @@
+const MESSAGE_DISPOSAL_TIME = 5000;
+
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
@@ -53,7 +55,7 @@ const sendSuccedMessage = () => {
   setTimeout(() => {
     okMessage.remove();
     document.removeEventListener('keydown', onOkMessageEscKeydown);
-  }, 5000);
+  }, MESSAGE_DISPOSAL_TIME);
   okMessage.addEventListener('click', onOkMessageModalClick);
   document.addEventListener('keydown', onOkMessageEscKeydown);
 };

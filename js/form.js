@@ -12,10 +12,15 @@ import {
   sendSuccedMessage
 } from './utils.js';
 
+const SLIDER_PACE = 100;
+
 const HEADER_LENGTH = {
   min: 30,
   max: 100
 };
+
+const MAX_CAPACITY = '100';
+const MIN_CAPACITY = '0';
 
 const MAX_PRICE = 100000;
 const MINIMAL_PRICE_LISTING = {
@@ -116,10 +121,10 @@ const checkRoomsAndCapacity = () => {
 };
 
 const getCapacityErrorMessage = () => {
-  if (rooms.value === '100' && capacity.value !== '0') {
+  if (rooms.value === MAX_CAPACITY && capacity.value !== MIN_CAPACITY) {
     return 'Не предзазначенная для проживания площадь';
   }
-  if (rooms.value !== '100' && rooms.value < capacity.value) {
+  if (rooms.value !== MAX_CAPACITY && rooms.value < capacity.value) {
     return `В ${rooms.value} комнате/ах не может проживать ${capacity.value} человек/а`;
   }
 };
@@ -177,7 +182,7 @@ noUiSlider.create(sliderElement, {
     max: MAX_PRICE,
   },
   start: minPropertyPrice,
-  step: 100,
+  step: SLIDER_PACE,
   connect: 'lower',
 });
 
@@ -194,7 +199,7 @@ variants.addEventListener('change', () => {
       max: MAX_PRICE,
     },
     start: minPropertyPrice,
-    step: 100
+    step: SLIDER_PACE
   });
 });
 
