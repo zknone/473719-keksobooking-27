@@ -4,13 +4,36 @@ import {
 } from './map.js';
 
 import {
-  starterPoint
+  STARTER_POINT
 } from './map.js';
 import {
   debounce,
   sendErrorMessage,
   sendSuccedMessage
 } from './utils.js';
+
+const HEADER_LENGTH = {
+  min: 30,
+  max: 100
+};
+
+const MAX_PRICE = 100000;
+const MINIMAL_PRICE_LISTING = {
+  'flat': 1000,
+  'bungalow': 0,
+  'house': 5000,
+  'palace': 10000,
+  'hotel': 3000,
+};
+
+const ALL_OPTIONS = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+
+const POSTING_ADDRESS = 'https://27.javascript.pages.academy/keksobooking';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -23,29 +46,6 @@ const capacity = adForm.querySelector('#capacity');
 const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
-
-const HeaderLength = {
-  min: 30,
-  max: 100
-};
-
-const maxPrice = 100000;
-const minPrice = {
-  'flat': 1000,
-  'bungalow': 0,
-  'house': 5000,
-  'palace': 10000,
-  'hotel': 3000,
-};
-
-const allOptions = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0],
-};
-
-const postingAddress = 'https://27.javascript.pages.academy/keksobooking';
 
 const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -79,7 +79,7 @@ const pristine = new Pristine(adForm, {
 });
 
 const validateTitle = (value) => {
-  const validation = value.length >= HeaderLength.min && value.length <= HeaderLength.max;
+  const validation = value.length >= HEADER_LENGTH.min && value.length <= HEADER_LENGTH.max;
   return validation;
 };
 
@@ -91,16 +91,16 @@ pristine.addValidator(
 
 const validatePrice = (value) => {
   const unit = variants.querySelector(':checked');
-  return parseInt(value, 10) <= maxPrice && parseInt(value, 10) >= minPrice[unit.value];
+  return parseInt(value, 10) <= MAX_PRICE && parseInt(value, 10) >= MINIMAL_PRICE_LISTING[unit.value];
 };
 
 const getPriceErrorMessage = (value) => {
   const unit = variants.querySelector(':checked');
-  if (parseInt(value, 10) > maxPrice) {
-    return `Не может стоить больше ${maxPrice} рублей`;
+  if (parseInt(value, 10) > MAX_PRICE) {
+    return `Не может стоить больше ${MAX_PRICE} рублей`;
   }
-  if (minPrice[unit.value] > 0 && parseInt(value, 10) < minPrice[unit.value]) {
-    return `Не может стоить меньше ${minPrice[unit.value]} рублей`;
+  if (MINIMAL_PRICE_LISTING[unit.value] > 0 && parseInt(value, 10) < MINIMAL_PRICE_LISTING[unit.value]) {
+    return `Не может стоить меньше ${MINIMAL_PRICE_LISTING[unit.value]} рублей`;
   }
 };
 
@@ -111,7 +111,7 @@ pristine.addValidator(
 );
 
 const checkRoomsAndCapacity = () => {
-  const validation = allOptions[rooms.value].includes(Number(capacity.value));
+  const validation = ALL_OPTIONS[rooms.value].includes(Number(capacity.value));
   return validation;
 };
 
@@ -137,7 +137,7 @@ pristine.addValidator(
 );
 
 const onUnitChange = () => {
-  actualProperty.placeholder = minPrice[this.value];
+  actualProperty.placeholder = MINIMAL_PRICE_LISTING[this.value];
   pristine.validate(actualProperty);
 };
 
@@ -169,12 +169,12 @@ adForm.addEventListener('submit', (evt) => {
 });
 
 const sliderElement = document.querySelector('.ad-form__slider');
-let minPropertyPrice = minPrice[variants.value];
+let minPropertyPrice = MINIMAL_PRICE_LISTING[variants.value];
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: minPrice[variants.value],
-    max: maxPrice,
+    min: MINIMAL_PRICE_LISTING[variants.value],
+    max: MAX_PRICE,
   },
   start: minPropertyPrice,
   step: 100,
@@ -187,11 +187,11 @@ sliderElement.noUiSlider.on('update', () => {
 });
 
 variants.addEventListener('change', () => {
-  minPropertyPrice = minPrice[variants.value];
+  minPropertyPrice = MINIMAL_PRICE_LISTING[variants.value];
   sliderElement.noUiSlider.updateOptions({
     range: {
       min: minPropertyPrice,
-      max: maxPrice,
+      max: MAX_PRICE,
     },
     start: minPropertyPrice,
     step: 100
@@ -201,7 +201,7 @@ variants.addEventListener('change', () => {
 const resetForm = () => {
   adForm.reset();
   sliderElement.noUiSlider.set(actualProperty.value);
-  resetMap(starterPoint);
+  resetMap(STARTER_POINT);
 };
 
 const onFormSubmit = (packages) => {
@@ -211,7 +211,7 @@ const onFormSubmit = (packages) => {
     const formData = new FormData(evt.target);
     deactivateForm();
 
-    fetch(postingAddress, {
+    fetch(POSTING_ADDRESS, {
       method: 'POST',
       body: formData,
     })
