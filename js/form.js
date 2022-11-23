@@ -141,6 +141,19 @@ pristine.addValidator(
   getCapacityErrorMessage,
 );
 
+pristine.validate(rooms);
+pristine.validate(capacity);
+
+rooms.addEventListener('change', ()=> {
+  pristine.validate(rooms);
+  pristine.validate(capacity);
+});
+
+capacity.addEventListener('change', ()=> {
+  pristine.validate(rooms);
+  pristine.validate(capacity);
+});
+
 const onUnitChange = () => {
   actualProperty.placeholder = MINIMAL_PRICE_LISTING[this.value];
   pristine.validate(actualProperty);
@@ -184,11 +197,18 @@ noUiSlider.create(sliderElement, {
   start: minPropertyPrice,
   step: SLIDER_PACE,
   connect: 'lower',
+  // format: wNumb({
+  //   decimals: 0,
+  // })
 });
 
 sliderElement.noUiSlider.on('update', () => {
   actualProperty.value = sliderElement.noUiSlider.get();
   pristine.validate(actualProperty);
+});
+
+actualProperty.addEventListener('input', ()=> {
+  sliderElement.noUiSlider.set(actualProperty.value);
 });
 
 variants.addEventListener('change', () => {
@@ -228,14 +248,14 @@ const onFormSubmit = (packages) => {
           activateForm();
         } else {
           sendErrorMessage();
-          resetForm();
+          pristine.reset();
           debounce(createMapMarkers(packages));
           activateForm();
         }
       })
       .catch(() => {
         sendErrorMessage();
-        resetForm();
+        pristine.reset();
         debounce(createMapMarkers(packages));
         activateForm();
       });
