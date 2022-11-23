@@ -2,10 +2,13 @@ import {
   resetMap,
   createMapMarkers
 } from './map.js';
-
 import {
   STARTER_POINT
 } from './map.js';
+import {
+  resetImage,
+  resetAvatar
+} from './preview.js';
 import {
   debounce,
   sendErrorMessage,
@@ -144,12 +147,12 @@ pristine.addValidator(
 pristine.validate(rooms);
 pristine.validate(capacity);
 
-rooms.addEventListener('change', ()=> {
+rooms.addEventListener('change', () => {
   pristine.validate(rooms);
   pristine.validate(capacity);
 });
 
-capacity.addEventListener('change', ()=> {
+capacity.addEventListener('change', () => {
   pristine.validate(rooms);
   pristine.validate(capacity);
 });
@@ -207,7 +210,7 @@ sliderElement.noUiSlider.on('update', () => {
   pristine.validate(actualProperty);
 });
 
-actualProperty.addEventListener('input', ()=> {
+actualProperty.addEventListener('input', () => {
   sliderElement.noUiSlider.set(actualProperty.value);
 });
 
@@ -244,6 +247,8 @@ const onFormSubmit = (packages) => {
         if (response.ok) {
           sendSuccedMessage();
           resetForm();
+          resetAvatar();
+          resetImage();
           debounce(createMapMarkers(packages));
           activateForm();
         } else {
@@ -266,6 +271,8 @@ const onResetButton = (packages) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
+    resetAvatar();
+    resetImage();
     debounce(createMapMarkers(packages));
   });
 };
