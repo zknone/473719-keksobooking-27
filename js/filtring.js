@@ -30,6 +30,8 @@ const roomsQuantity = filterForm.querySelector('#housing-rooms');
 const guestsCapacity = filterForm.querySelector('#housing-guests');
 const featureOptions = filterForm.querySelectorAll('.map__checkbox');
 
+const resetFilter = () => filterForm.reset();
+
 const filterByType = (offer, type) =>
   type === ANY_VALUE || offer.offer.type === type;
 
@@ -111,11 +113,12 @@ const applyFilters = (offers, evt) => {
 };
 
 const onFilterChange = (offers, callback) => {
-  filterForm.addEventListener('change', (evt) => {
-    debounce(callback(applyFilters(offers, evt)));
-  });
+  filterForm.addEventListener('change', debounce((evt) => {
+    callback(applyFilters(offers, evt));
+  }));
 };
 
+
 export {
-  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES
+  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES, resetFilter
 };

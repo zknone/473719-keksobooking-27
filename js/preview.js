@@ -19,6 +19,7 @@ const initializeImagePreview = () => {
 };
 
 const onImageChange = (input, output) => {
+// выделить обработчик отдельный
   input.addEventListener('change', () => {
     const preview = output;
     const file = input.files[0];
@@ -33,8 +34,8 @@ const onImageChange = (input, output) => {
 
 const resetImage = () => {
   photoPreview.innerHTML = '';
+  // этот обработчик удалить
   onImageChange(photoChooser, initializeImagePreview());
-  //вот так заработало, правильно ли? нужно ли перед этим удалять событие?
 };
 
 const resetAvatar = () => {

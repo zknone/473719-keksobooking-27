@@ -14,6 +14,9 @@ import {
   sendErrorMessage,
   sendSuccedMessage
 } from './utils.js';
+import {
+  resetFilter
+} from './filtring.js';
 
 const SLIDER_PACE = 100;
 
@@ -200,9 +203,6 @@ noUiSlider.create(sliderElement, {
   start: minPropertyPrice,
   step: SLIDER_PACE,
   connect: 'lower',
-  // format: wNumb({
-  //   decimals: 0,
-  // })
 });
 
 sliderElement.noUiSlider.on('update', () => {
@@ -230,40 +230,42 @@ const resetForm = () => {
   adForm.reset();
   sliderElement.noUiSlider.set(actualProperty.value);
   resetMap(STARTER_POINT);
+  resetFilter();
 };
 
 const onFormSubmit = (packages) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
-    const formData = new FormData(evt.target);
-    deactivateForm();
+    if (pristine.validate()) {
+      const formData = new FormData(evt.target);
+      deactivateForm();
 
-    fetch(POSTING_ADDRESS, {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => {
-        if (response.ok) {
-          sendSuccedMessage();
-          resetForm();
-          resetAvatar();
-          resetImage();
-          debounce(createMapMarkers(packages));
-          activateForm();
-        } else {
+      fetch(POSTING_ADDRESS, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          if (response.ok) {
+            sendSuccedMessage();
+            resetForm();
+            resetAvatar();
+            resetImage();
+            createMapMarkers(packages);
+            activateForm();
+          } else {
+            sendErrorMessage();
+            pristine.reset();
+            createMapMarkers(packages);
+            activateForm();
+          }
+        })
+        .catch(() => {
           sendErrorMessage();
           pristine.reset();
-          debounce(createMapMarkers(packages));
+          createMapMarkers(packages);
           activateForm();
-        }
-      })
-      .catch(() => {
-        sendErrorMessage();
-        pristine.reset();
-        debounce(createMapMarkers(packages));
-        activateForm();
-      });
+        });
+    }
   });
 };
 
