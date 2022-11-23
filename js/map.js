@@ -54,11 +54,10 @@ const layerForMarkers = L.layerGroup().addTo(map);
 const resetMap = (coordinates) => {
   chosenAddress.value = `${coordinates.lat}, ${coordinates.lng}`;
   mainPinMarker.setLatLng(coordinates);
-  layerForMarkers.clearLayers();
 };
 
 const createMapMarkers = (dataBase) => {
-  resetMap(STARTER_POINT);
+  layerForMarkers.clearLayers();
   dataBase.forEach((dataUnit) => {
     const marker = L.marker(dataUnit.location, {
       icon,

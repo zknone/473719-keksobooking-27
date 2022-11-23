@@ -1,6 +1,8 @@
 import './form.js';
 import './map.js';
 import {
+  resetMap,
+  STARTER_POINT,
   createMapMarkers
 } from './map.js';
 import {
@@ -23,6 +25,7 @@ fetch(dataSource)
   .then((response) => response.json())
   .then((packages) => {
     activateForm();
+    resetMap(STARTER_POINT);
     createMapMarkers(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
     onFilterChange(packages, createMapMarkers);
     onFormSubmit(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));

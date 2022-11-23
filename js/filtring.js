@@ -30,7 +30,6 @@ const roomsQuantity = filterForm.querySelector('#housing-rooms');
 const guestsCapacity = filterForm.querySelector('#housing-guests');
 const featureOptions = filterForm.querySelectorAll('.map__checkbox');
 
-
 const filterByType = (offer, type) =>
   type === ANY_VALUE || offer.offer.type === type;
 
