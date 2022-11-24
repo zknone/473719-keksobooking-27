@@ -18,7 +18,7 @@ const initializeImagePreview = () => {
   return imageForPreview;
 };
 
-const onImageChange = (input, output) => {
+const changeImage = (input, output) => {
 // выделить обработчик отдельный
   input.addEventListener('change', () => {
     const preview = output;
@@ -35,15 +35,15 @@ const onImageChange = (input, output) => {
 const resetImage = () => {
   photoPreview.innerHTML = '';
   // этот обработчик удалить
-  onImageChange(photoChooser, initializeImagePreview());
+  changeImage(photoChooser, initializeImagePreview());
 };
 
 const resetAvatar = () => {
   avatarPreview.src = 'img/muffin-grey.svg';
 };
 
-onImageChange(avatarChooser, avatarPreview);
-onImageChange(photoChooser, initializeImagePreview());
+changeImage(avatarChooser, avatarPreview);
+changeImage(photoChooser, initializeImagePreview());
 
 export {
   resetImage,

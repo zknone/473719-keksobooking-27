@@ -112,7 +112,7 @@ const applyFilters = (offers, evt) => {
   return processedPackage;
 };
 
-const onFilterChange = (offers, callback) => {
+const changeFilter = (offers, callback) => {
   filterForm.addEventListener('change', debounce((evt) => {
     callback(applyFilters(offers, evt));
   }));
@@ -120,5 +120,5 @@ const onFilterChange = (offers, callback) => {
 
 
 export {
-  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES, resetFilter
+  changeFilter, QUANTITY_OF_RENDERED_BUBBLES, resetFilter
 };

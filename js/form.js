@@ -269,19 +269,19 @@ const onFormSubmit = (packages) => {
   });
 };
 
-const onResetButton = (packages) => {
-  resetButton.addEventListener('click', (evt) => {
+const resetAll = (packages) => {
+  resetButton.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     resetForm();
     resetAvatar();
     resetImage();
-    debounce(createMapMarkers(packages));
-  });
+    createMapMarkers(packages);
+  }));
 };
 
 export {
   deactivateForm,
   activateForm,
-  onResetButton,
+  resetAll,
   onFormSubmit
 };
