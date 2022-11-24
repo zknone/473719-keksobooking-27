@@ -10,7 +10,6 @@ const photoPreview = document.querySelector('.ad-form__photo');
 
 const initializeImagePreview = () => {
   const imageForPreview = document.createElement('img');
-
   photoPreview.append(imageForPreview);
   imageForPreview.width = IMAGE_WIDTH;
   imageForPreview.height = IMAGE_HEIGHT;
