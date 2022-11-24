@@ -52,6 +52,7 @@ const map = initializeMap(STARTER_POINT);
 const layerForMarkers = L.layerGroup().addTo(map);
 
 const resetMap = (coordinates) => {
+  map.setView(coordinates, 10);
   chosenAddress.value = `${coordinates.lat}, ${coordinates.lng}`;
   mainPinMarker.setLatLng(coordinates);
 };
