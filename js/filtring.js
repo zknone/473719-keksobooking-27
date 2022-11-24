@@ -8,6 +8,21 @@ const PriceVariants = {
   HIGH: 50000,
 };
 
+const TypesListing = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high'
+};
+
+const ANY_VALUE = 'any';
+
+const FilterListing = {
+  TYPE: 'housing-type',
+  PRICE: 'housing-price',
+  ROOMS: 'housing-rooms',
+  GUESTS: 'housing-guests'
+};
+
 const filterForm = document.querySelector('.map__filters');
 const typeOfProperty = filterForm.querySelector('#housing-type');
 const priceOfProperty = filterForm.querySelector('#housing-price');
@@ -15,28 +30,29 @@ const roomsQuantity = filterForm.querySelector('#housing-rooms');
 const guestsCapacity = filterForm.querySelector('#housing-guests');
 const featureOptions = filterForm.querySelectorAll('.map__checkbox');
 
+const resetFilter = () => filterForm.reset();
 
 const filterByType = (offer, type) =>
-  type === 'any' || offer.offer.type === type;
+  type === ANY_VALUE || offer.offer.type === type;
 
 const filterByPrice = (offer, price) => {
   switch (price) {
-    case 'any':
+    case ANY_VALUE:
       return true;
-    case 'low':
+    case TypesListing.LOW:
       return offer.offer.price < PriceVariants.MIDDLE;
-    case 'middle':
+    case TypesListing.MIDDLE:
       return (offer.offer.price < PriceVariants.HIGH && offer.offer.price >= PriceVariants.MIDDLE);
-    case 'high':
+    case TypesListing.HIGH:
       return offer.offer.price >= PriceVariants.HIGH;
   }
 };
 
 const filterByRooms = (offer, rooms) =>
-  rooms === 'any' || offer.offer.rooms === Number(rooms);
+  rooms === ANY_VALUE || offer.offer.rooms === Number(rooms);
 
 const filterByGuests = (offer, guests) =>
-  guests === 'any' || offer.offer.guests === Number(guests);
+  guests === ANY_VALUE || offer.offer.guests === Number(guests);
 
 
 const filterByFeatures = (offer, features) => {
@@ -58,16 +74,16 @@ const applyFilters = (offers, evt) => {
   let chosenGuests = guestsCapacity.value;
 
   switch (evt.target.name) {
-    case 'housing-type':
+    case FilterListing.TYPE:
       chosenType = evt.target.value;
       break;
-    case 'housing-price':
+    case FilterListing.PRICE:
       chosenPrice = evt.target.value;
       break;
-    case 'housing-rooms':
+    case FilterListing.ROOMS:
       chosenRooms = evt.target.value;
       break;
-    case 'housing-guests':
+    case FilterListing.GUESTS:
       chosenGuests = evt.target.value;
   }
 
@@ -96,12 +112,12 @@ const applyFilters = (offers, evt) => {
   return processedPackage;
 };
 
-const onFilterChange = (offers, callback) => {
-  filterForm.addEventListener('change', (evt) => {
-    debounce(callback(applyFilters(offers, evt)));
-  });
+const changeFilter = (offers, callback) => {
+  filterForm.addEventListener('change', debounce((evt) => {
+    callback(applyFilters(offers, evt));
+  }));
 };
 
 export {
-  onFilterChange, QUANTITY_OF_RENDERED_BUBBLES
+  changeFilter, QUANTITY_OF_RENDERED_BUBBLES, resetFilter
 };

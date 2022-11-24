@@ -4,7 +4,9 @@ import {
   createCard
 } from './render-cards.js';
 
-const starterPoint = {
+const ROUNDING_NUMBER = 6;
+
+const STARTER_POINT = {
   lat: 35.652832,
   lng: 139.839478,
 };
@@ -22,7 +24,7 @@ const icon = L.icon({
 });
 
 const chosenAddress = document.querySelector('#address');
-const mainPinMarker = L.marker(starterPoint, {
+const mainPinMarker = L.marker(STARTER_POINT, {
   draggable: true,
   icon: mainPinIcon,
 }, );
@@ -40,23 +42,23 @@ const initializeMap = (coordinates) => {
 
   mainPinMarker.addTo(mapInitialized);
   mainPinMarker.on('moveend', (evt) => {
-    chosenAddress.value = evt.target.getLatLng();
+    chosenAddress.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_NUMBER)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_NUMBER)}`;
   });
   return (mapInitialized);
 };
 
-const map = initializeMap(starterPoint);
+const map = initializeMap(STARTER_POINT);
 
 const layerForMarkers = L.layerGroup().addTo(map);
 
 const resetMap = (coordinates) => {
-  chosenAddress.value = `LatLng(${coordinates.lat}, ${coordinates.lng})`;
+  map.setView(coordinates, 10);
+  chosenAddress.value = `${coordinates.lat}, ${coordinates.lng}`;
   mainPinMarker.setLatLng(coordinates);
-  layerForMarkers.clearLayers();
 };
 
 const createMapMarkers = (dataBase) => {
-  resetMap(starterPoint);
+  layerForMarkers.clearLayers();
   dataBase.forEach((dataUnit) => {
     const marker = L.marker(dataUnit.location, {
       icon,
@@ -72,5 +74,5 @@ export {
   createMapMarkers,
   resetMap,
   initializeMap,
-  starterPoint
+  STARTER_POINT
 };

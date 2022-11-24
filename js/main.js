@@ -1,17 +1,19 @@
 import './form.js';
 import './map.js';
 import {
+  resetMap,
+  STARTER_POINT,
   createMapMarkers
 } from './map.js';
 import {
-  onFilterChange,
+  changeFilter,
   QUANTITY_OF_RENDERED_BUBBLES
 } from './filtring.js';
 import {
   activateForm,
   deactivateForm,
   onFormSubmit,
-  onResetButton
+  resetAll
 } from './form.js';
 import './preview.js';
 
@@ -22,9 +24,10 @@ deactivateForm();
 fetch(dataSource)
   .then((response) => response.json())
   .then((packages) => {
-    activateForm();
+    resetMap(STARTER_POINT);
     createMapMarkers(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
-    onFilterChange(packages, createMapMarkers);
+    activateForm();
+    changeFilter(packages, createMapMarkers);
     onFormSubmit(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
-    onResetButton(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
+    resetAll(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
   });
