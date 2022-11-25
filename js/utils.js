@@ -1,3 +1,5 @@
+import { isEscKey } from './keyboard.js';
+
 const MESSAGE_DISPOSAL_TIME = 5000;
 
 const debounce = (callback, timeoutDelay = 500) => {
@@ -27,14 +29,14 @@ const errorsMessage = errorsMessageTemplate.cloneNode(true);
 const bodyElement = document.querySelector('body');
 
 const onOkMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscKey(evt)) {
     okMessage.remove();
     document.removeEventListener('keydown', onOkMessageEscKeydown);
   }
 };
 
 const onErrorMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscKey(evt)) {
     errorsMessage.remove();
     document.removeEventListener('keydown', onErrorMessageEscKeydown);
   }

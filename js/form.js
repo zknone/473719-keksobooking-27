@@ -18,7 +18,7 @@ import {
   resetFilter
 } from './filtring.js';
 
-const SLIDER_PACE = 100;
+const SLIDER_PACE = 1;
 
 const HEADER_LENGTH = {
   min: 30,
@@ -203,11 +203,10 @@ noUiSlider.create(sliderElement, {
   start: minPropertyPrice,
   step: SLIDER_PACE,
   connect: 'lower',
-});
-
-sliderElement.noUiSlider.on('update', () => {
-  actualProperty.value = sliderElement.noUiSlider.get();
-  pristine.validate(actualProperty);
+  format: {
+    to: (value) => value.toFixed(0),
+    from: (value) => parseFloat(value),
+  }
 });
 
 actualProperty.addEventListener('input', () => {
@@ -222,8 +221,13 @@ variants.addEventListener('change', () => {
       max: MAX_PRICE,
     },
     start: minPropertyPrice,
-    step: SLIDER_PACE
+    step: SLIDER_PACE,
   });
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  actualProperty.value = sliderElement.noUiSlider.get();
+  pristine.validate(actualProperty);
 });
 
 const resetForm = () => {
