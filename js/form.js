@@ -162,8 +162,8 @@ capacity.addEventListener('change', () => {
   pristine.validate(capacity);
 });
 
-const onUnitChange = () => {
-  actualProperty.placeholder = MINIMAL_PRICE_LISTING[this.value];
+const onUnitChange = (evt) => {
+  actualProperty.placeholder = MINIMAL_PRICE_LISTING[evt.target];
   pristine.validate(actualProperty);
 };
 
@@ -211,6 +211,8 @@ noUiSlider.create(sliderElement, {
   }
 });
 
+actualProperty.value = sliderElement.noUiSlider.get();
+
 actualProperty.addEventListener('input', () => {
   sliderElement.noUiSlider.set(actualProperty.value);
 });
@@ -222,12 +224,12 @@ variants.addEventListener('change', () => {
       min: minPropertyPrice,
       max: MAX_PRICE,
     },
-    start: minPropertyPrice,
+    start: actualProperty.value,
     step: SLIDER_PACE,
   });
 });
 
-sliderElement.noUiSlider.on('update', () => {
+sliderElement.noUiSlider.on('slide', () => {
   actualProperty.value = sliderElement.noUiSlider.get();
   pristine.validate(actualProperty);
 });
