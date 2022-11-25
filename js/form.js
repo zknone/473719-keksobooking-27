@@ -76,13 +76,11 @@ const switchFiltersStatus = (status) => {
   switchStateElements(fieldsets, status);
 };
 
-const switchPageStatus = (status) => {
-  switchFormStatus(status);
-  switchFiltersStatus(status);
-};
+const deactivateForm = () => switchFormStatus(true);
+const activateForm = () => switchFormStatus(false);
+const deactivateFilters = () => switchFiltersStatus(true);
+const activateFilters = () => switchFiltersStatus(false);
 
-const deactivateForm = () => switchPageStatus(true);
-const activateForm = () => switchPageStatus(false);
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -234,9 +232,14 @@ sliderElement.noUiSlider.on('update', () => {
   pristine.validate(actualProperty);
 });
 
+const resetPrice = () => {
+  sliderElement.noUiSlider.set(MINIMAL_PRICE_LISTING.flat);
+  actualProperty.value = MINIMAL_PRICE_LISTING.flat;
+};
+
 const resetForm = () => {
   adForm.reset();
-  sliderElement.noUiSlider.set(actualProperty.value);
+  resetPrice();
   resetMap(STARTER_POINT);
   resetFilter();
 };
@@ -247,7 +250,7 @@ const onFormSubmit = (packages) => {
     if (pristine.validate()) {
       const formData = new FormData(evt.target);
       deactivateForm();
-
+      deactivateFilters();
       fetch(POSTING_ADDRESS, {
         method: 'POST',
         body: formData,
@@ -260,11 +263,13 @@ const onFormSubmit = (packages) => {
             resetImage();
             createMapMarkers(packages);
             activateForm();
+            activateFilters();
           } else {
             sendErrorMessage();
             pristine.reset();
             createMapMarkers(packages);
             activateForm();
+            activateFilters();
           }
         })
         .catch(() => {
@@ -272,6 +277,7 @@ const onFormSubmit = (packages) => {
           pristine.reset();
           createMapMarkers(packages);
           activateForm();
+          activateFilters();
         });
     }
   });
@@ -291,5 +297,7 @@ export {
   deactivateForm,
   activateForm,
   resetAll,
-  onFormSubmit
+  onFormSubmit,
+  activateFilters,
+  deactivateFilters
 };
