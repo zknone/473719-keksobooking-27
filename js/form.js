@@ -47,9 +47,6 @@ const ALL_OPTIONS = {
 const POSTING_ADDRESS = 'https://27.javascript.pages.academy/keksobooking';
 
 const adForm = document.querySelector('.ad-form');
-const adFormFieldsets = adForm.querySelectorAll('fieldset');
-const adFormSlider = adForm.querySelector('.ad-form__slider');
-const adFormMapFilters = document.querySelector('.map__filters');
 const actualProperty = adForm.querySelector('#price');
 const variants = adForm.querySelector('#type');
 const rooms = adForm.querySelector('#room_number');
@@ -58,27 +55,34 @@ const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
 
-const deactivateForm = () => {
-  adForm.classList.add('ad-form--disabled');
-  adFormFieldsets.forEach((adFormFieldset) => {
-    adFormFieldset.disabled = true;
+const switchStateElements = (elements, state) => {
+  elements.forEach((element) => {
+    element.disabled = state;
   });
-  adFormSlider.disabled = true;
-  adFormSlider.classList.add('ad-form__slider--disabled');
-  adFormMapFilters.disabled = true;
-  adFormMapFilters.classList.add('map__filters--disabled');
 };
 
-const activateForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  adFormFieldsets.forEach((adFormFieldset) => {
-    adFormFieldset.disabled = false;
-  });
-  adFormSlider.disabled = false;
-  adFormSlider.classList.remove('ad-form__slider--disabled');
-  adFormMapFilters.disabled = false;
-  adFormMapFilters.classList.remove('map__filters--disabled');
+const switchFormStatus = (status) => {
+  const fieldsets = adForm.querySelectorAll('fieldset');
+  adForm.classList.toggle('ad-form--disabled', status);
+  switchStateElements(fieldsets, status);
 };
+
+const switchFiltersStatus = (status) => {
+  const filters = document.querySelector('.map__filters');
+  const selects = filters.querySelectorAll('select');
+  const fieldsets = filters.querySelectorAll('fieldset');
+  filters.classList.toggle('map__filters--disabled', status);
+  switchStateElements(selects, status);
+  switchStateElements(fieldsets, status);
+};
+
+const switchPageStatus = (status) => {
+  switchFormStatus(status);
+  switchFiltersStatus(status);
+};
+
+const deactivateForm = () => switchPageStatus(true);
+const activateForm = () => switchPageStatus(false);
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
