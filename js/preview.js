@@ -19,7 +19,6 @@ const initializeImagePreview = () => {
 };
 
 const changeImage = (input, output) => {
-// выделить обработчик отдельный
   input.addEventListener('change', () => {
     const preview = output;
     const file = input.files[0];
@@ -34,7 +33,6 @@ const changeImage = (input, output) => {
 
 const resetImage = () => {
   photoPreview.innerHTML = '';
-  // этот обработчик удалить
   changeImage(photoChooser, initializeImagePreview());
 };
 
