@@ -55,9 +55,9 @@ const actualTimeIn = adForm.querySelector('#timein');
 const actualTimeOut = adForm.querySelector('#timeout');
 const resetButton = adForm.querySelector('.ad-form__reset');
 
-const switchStateElements = (elements, state) => {
+const switchStateElements = (elements, status) => {
   elements.forEach((element) => {
-    element.disabled = state;
+    element.disabled = status;
   });
 };
 
