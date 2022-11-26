@@ -10,18 +10,6 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-const throttle = (callback, delayBetweenFrames) => {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-};
-
 const okMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const okMessage = okMessageTemplate.cloneNode(true);
 const errorsMessageTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -70,7 +58,6 @@ const sendErrorMessage = () => {
 
 export {
   debounce,
-  throttle,
   sendErrorMessage,
   sendSuccedMessage
 };
