@@ -30,7 +30,6 @@ fetch(dataSource)
     resetMap(STARTER_POINT);
     activateForm();
     createMapMarkers(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));
-    //нужен еще один then?
     activateFilters();
     changeFilter(packages, createMapMarkers);
     onFormSubmit(packages.slice(0, QUANTITY_OF_RENDERED_BUBBLES));

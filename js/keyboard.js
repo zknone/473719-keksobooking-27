@@ -1,9 +1,6 @@
 const ESCAPE_KEY = 'Escape';
 
-const isEscKey = (evt) => {
-  const pressedKey = evt.key;
-  return (pressedKey === ESCAPE_KEY);
-};
+const isEscKey = (evt) => evt.key === ESCAPE_KEY;
 
 export {
   isEscKey

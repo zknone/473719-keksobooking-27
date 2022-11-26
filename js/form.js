@@ -213,7 +213,7 @@ noUiSlider.create(sliderElement, {
 
 actualProperty.value = sliderElement.noUiSlider.get();
 
-actualProperty.addEventListener('input', () => {
+actualProperty.addEventListener('change', () => {
   sliderElement.noUiSlider.set(actualProperty.value);
 });
 
