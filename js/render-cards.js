@@ -1,3 +1,4 @@
+//This module renders popup-cards
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const offerTypes = {

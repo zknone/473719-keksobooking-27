@@ -1,3 +1,4 @@
+//this module renders map
 import './render-cards.js';
 
 import {

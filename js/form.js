@@ -1,3 +1,4 @@
+//form validation and interactions
 import {
   resetMap,
   createMapMarkers

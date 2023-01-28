@@ -1,3 +1,4 @@
+//this module show preview of image in browser without uploading on server
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const avatarChooser = document.querySelector('.ad-form-header__input');
